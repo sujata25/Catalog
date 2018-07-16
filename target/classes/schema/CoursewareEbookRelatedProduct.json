@@ -1,0 +1,243 @@
+{  
+   "status":{  
+      "responseCode":0,
+      "message":"OK"
+   },
+   "params":{  
+      "dims":[  
+         "Unlimited"
+      ],
+      "expanded":[  
+         "true"
+      ],
+      "q":[  
+         "9780357165003"
+      ]
+   },
+   "dimensions":null,
+   "totalRecords":3,
+   "records":[  
+      {  
+         "title":"MindTap Reader for Essentials of Pharmacology for Health Professions",
+         "epi":"13606569852055750814153971133169819199",
+         "isbn13":"9780357165003",
+         "isbn10":"0357165004",
+         "edition":"8th",
+         "newFlag":true,
+         "authorLast":null,
+         "authors":[  
+            {  
+               "bio":"Bruce Colbert is an Associate Professor and Director of the Allied Health Care Department at the University of Pittsburgh at Johnstown. The author of 10 traditional books, he also developed an interactive worktext and DVD program on student success. Focusing on such topics as stress and time management, he has presented more than 250 regional and national lectures and workshops devoted to professional skills, enhancing critical and creative thinking and effective decision-making. In addition, Mr. Colbert consults with educational programs to improve teaching effectiveness as well as presents active teaching workshops.",
+               "name":"Bruce Colbert",
+               "id":"2314",
+               "affiliates":[  
+                  "University of Pittsburgh at Johnstown"
+               ],
+               "imageUrl":"http://s-www.cengage.com/covers/imageServlet?contributor_id=2314"
+            },
+            {  
+               "bio":"Ruth Woodrow is a Medical Consultant for Education and Infection Control in the Health Services Department at Senior Friendship Centers, Inc. in Sarasota, Florida. She previously served as Director of Staff Development at Plymouth Harbor, Inc., and she also taught pharmacology at the Sarasota County Technical Institute.",
+               "name":"Ruth Woodrow",
+               "id":"2366",
+               "affiliates":[  
+
+               ],
+               "imageUrl":"http://s-www.cengage.com/covers/imageServlet?contributor_id=2366"
+            }
+         ],
+         "metaDescription":null,
+         "metaKeywords":null,
+         "pacIsbn10":null,
+         "pacIsbn13":null,
+         "copyrightYear":"2019",
+         "lowestPrice":null,
+         "smpDescription":"Best-selling ESSENTIALS OF PHARMACOLOGY FOR HEALTH PROFESSIONS, 8e is the ideal resource to help you prepare for licensed practical nursing, medical assisting, and other allied health careers. Focusing on \"need to know\" drug information, it gives you the confidence to master pharmacology. \n\nExtremely reader friendly, this clear, concise book simplifies material into engaging and manageable chapters. By stressing clinical application, it also ensures you understand the \"why\" behind what you learn. \n\nPart I provides a solid foundation in basic pharmacologic principles. Part II covers drugs, sources, legal concerns, and medical uses. Chapters organize drugs by classifications and include their purpose, side effects, interactions, and precautions or contraindications. Patient education is highlighted for each category, while numerous reference tables help pull everything together for you by listing the most commonly prescribed drugs, dosages, available forms, and special considerations.",
+         "pubDate":"2018-06-21",
+         "publishAvailability":"Published",
+         "subtitle":null,
+         "unlimited":true,
+         "dims":{  
+            "platforms":null
+         },
+         "cuRecIsbns":[  
+            "9780357160459",
+            "9780357160503",
+            "9780357162057",
+            "9780357162453",
+            "9780357167595",
+            "9781337423199"
+         ],
+         "fulfillmentTypes":null,
+         "cuEBookIsbns":null,
+         "digitalOptions":null,
+         "formats":null,
+         "printRentals":null,
+         "expandedPlatforms":null
+      },
+      {  
+         "title":"MindTap for Essentials of Pharmacology for Health Professions",
+         "epi":"87336241210043193341693123855679899755",
+         "isbn13":"9781337902588",
+         "isbn10":"1337902586",
+         "edition":"8th",
+         "newFlag":true,
+         "authorLast":null,
+         "authors":[  
+            {  
+               "bio":"Bruce Colbert is an Associate Professor and Director of the Allied Health Care Department at the University of Pittsburgh at Johnstown. The author of 10 traditional books, he also developed an interactive worktext and DVD program on student success. Focusing on such topics as stress and time management, he has presented more than 250 regional and national lectures and workshops devoted to professional skills, enhancing critical and creative thinking and effective decision-making. In addition, Mr. Colbert consults with educational programs to improve teaching effectiveness as well as presents active teaching workshops.",
+               "name":"Bruce Colbert",
+               "id":"2314",
+               "affiliates":[  
+                  "University of Pittsburgh at Johnstown"
+               ],
+               "imageUrl":"http://s-www.cengage.com/covers/imageServlet?contributor_id=2314"
+            },
+            {  
+               "bio":"Ruth Woodrow is a Medical Consultant for Education and Infection Control in the Health Services Department at Senior Friendship Centers, Inc. in Sarasota, Florida. She previously served as Director of Staff Development at Plymouth Harbor, Inc., and she also taught pharmacology at the Sarasota County Technical Institute.",
+               "name":"Ruth Woodrow",
+               "id":"2366",
+               "affiliates":[  
+
+               ],
+               "imageUrl":"http://s-www.cengage.com/covers/imageServlet?contributor_id=2366"
+            }
+         ],
+         "metaDescription":null,
+         "metaKeywords":null,
+         "pacIsbn10":null,
+         "pacIsbn13":null,
+         "copyrightYear":"2019",
+         "lowestPrice":null,
+         "smpDescription":null,
+         "pubDate":"2018-01-01",
+         "publishAvailability":"Published",
+         "subtitle":null,
+         "unlimited":true,
+         "dims":{  
+            "platforms":null
+         },
+         "cuRecIsbns":[  
+            "9780357160459",
+            "9780357160503",
+            "9780357162057",
+            "9780357162453",
+            "9780357165003",
+            "9780357167595",
+            "9781337423199"
+         ],
+         "fulfillmentTypes":null,
+         "cuEBookIsbns":[  
+            "9780357165003"
+         ],
+         "digitalOptions":null,
+         "formats":null,
+         "printRentals":null,
+         "expandedPlatforms":null
+      },
+      {  
+         "title":"MindTap Basic Health Sciences for Essentials of Pharmacology for Health Professions",
+         "epi":"3415366181909016770611118931639593462",
+         "isbn13":"9781337395922",
+         "isbn10":"1337395927",
+         "edition":"8th",
+         "newFlag":true,
+         "authorLast":null,
+         "authors":[  
+            {  
+               "bio":"Bruce Colbert is an Associate Professor and Director of the Allied Health Care Department at the University of Pittsburgh at Johnstown. The author of 10 traditional books, he also developed an interactive worktext and DVD program on student success. Focusing on such topics as stress and time management, he has presented more than 250 regional and national lectures and workshops devoted to professional skills, enhancing critical and creative thinking and effective decision-making. In addition, Mr. Colbert consults with educational programs to improve teaching effectiveness as well as presents active teaching workshops.",
+               "name":"Bruce Colbert",
+               "id":"2314",
+               "affiliates":[  
+                  "University of Pittsburgh at Johnstown"
+               ],
+               "imageUrl":"http://s-www.cengage.com/covers/imageServlet?contributor_id=2314"
+            },
+            {  
+               "bio":"Ruth Woodrow is a Medical Consultant for Education and Infection Control in the Health Services Department at Senior Friendship Centers, Inc. in Sarasota, Florida. She previously served as Director of Staff Development at Plymouth Harbor, Inc., and she also taught pharmacology at the Sarasota County Technical Institute.",
+               "name":"Ruth Woodrow",
+               "id":"2366",
+               "affiliates":[  
+
+               ],
+               "imageUrl":"http://s-www.cengage.com/covers/imageServlet?contributor_id=2366"
+            }
+         ],
+         "metaDescription":null,
+         "metaKeywords":null,
+         "pacIsbn10":"1337395935",
+         "pacIsbn13":"9781337395939",
+         "copyrightYear":"2019",
+         "lowestPrice":null,
+         "smpDescription":"MindTap Basic Health Sciences for Colbert/Woodrow's ESSENTIALS OF PHARMACOLOGY FOR HEALTH PROFESSIONS, 8th Edition is the digital learning solution that powers students from memorization to mastery. It gives you complete control of your course -- to provide engaging content, to challenge every individual, and to build their confidence. Empower students to accelerate their progress with MindTap. MindTap: Powered by You.\n\nMindTap gives you complete ownership of your content and learning experience. Customize the interactive syllabi, emphasize the most important topics, and add your own material or notes in the eBook. The guided learning path demonstrates the relevance of basic pharmacology principles to health care professions through engagement activities, interactive exercises, and procedural videos. The Pronounce activity ensures correct pronunciation of the top 200 drugs, plus additional hospital drugs. Easy-to-use reference tables with each classification list the most commonly prescribed drugs according to their generic and trade names, with dosage and available forms, special considerations, and audio to encourage correct pronunciation of drugs most likely to be encountered in health care. Learners apply an understanding of pharmacology through patient education scenarios. These simulations elevate the study of pharmacology by challenging students to apply concepts to practice.",
+         "pubDate":"2018-01-01",
+         "publishAvailability":"Published",
+         "subtitle":null,
+         "unlimited":true,
+         "dims":{  
+            "platforms":[  
+               "MindTap"
+            ]
+         },
+         "cuRecIsbns":[  
+            "9780357160459",
+            "9780357160503",
+            "9780357162057",
+            "9780357162453",
+            "9780357165003",
+            "9780357167595",
+            "9781337423199"
+         ],
+         "fulfillmentTypes":null,
+         "cuEBookIsbns":[  
+            "9780357165003"
+         ],
+         "digitalOptions":null,
+         "formats":null,
+         "printRentals":null,
+         "expandedPlatforms":null
+      }
+   ],
+   "guidedNavigation":[  
+      {  
+         "id":185,
+         "name":"SearchableISBNOnly",
+         "multiselect":false,
+         "refinements":[  
+            {  
+               "id":186,
+               "name":"Search",
+               "multiselect":false,
+               "refinements":null,
+               "count":1
+            }
+         ],
+         "count":0
+      },
+      {  
+         "id":182,
+         "name":"Platform",
+         "multiselect":false,
+         "refinements":[  
+            {  
+               "id":4294953852,
+               "name":"MindTap",
+               "multiselect":false,
+               "refinements":null,
+               "count":1
+            }
+         ],
+         "count":0
+      }
+   ],
+   "selectedRefinements":[  
+      {  
+         "id":184,
+         "name":"Unlimited",
+         "multiselect":false,
+         "dimensionName":"Catalog",
+         "dimensionId":3
+      }
+   ],
+   "searchReports":null,
+   "redirect":"/c/essentials-of-pharmacology-for-health-professions-8e-colbert/9780357165003?searchIsbn=9780357165003"
+}

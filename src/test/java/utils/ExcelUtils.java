@@ -39,14 +39,34 @@ public class ExcelUtils {
                     .bufferSize(4096)     
                     .open(ExcelFile); 
             ExcelWSheet = workbook.getSheet(sheetName);
-            String CellData = "";
+            //String CellData = "";
             int index=0,rowItr=0;
             dataList=new ArrayList<>(); 
   		   	 for(Row r:ExcelWSheet){ 
 	  		   		if(index>=1 && maxRows>0){
 	  		       		List<String> data1=new ArrayList<String>();
+  		       			System.out.println("data 1" + index);
+  		       			try{
+  	  		       			System.out.println("r is==" + r.getCell(2).getStringCellValue());
+  		       			}catch(Exception e){
+  		       				e.printStackTrace();
+  		       				System.out.println("exception is ========");
+  		       			}
 	  		       		for(Cell c:r){
+	  		       			System.out.println("cell value is===  " + c.getStringCellValue().trim());
+	  		       			System.out.println("value of c is ======"+ c);
+	  		       			if(c!=null){
+	  		       			 data1.add(c.getStringCellValue());	
+	  		       			}else{
+	  		       				data1.add(" ");
+	  		       			}
+	  		       			/*
+	  		       			if(c.getStringCellValue().trim() == null || c.getStringCellValue().trim() ==""){
+	  		       				data1.add("null");
+	  		       			}else{
 	  		       				data1.add(c.getStringCellValue());
+
+	  		       			}*/
 	  		       		 }
 	  		       		dataList.add(data1);
 	  		       	maxRows--;

@@ -2,22 +2,21 @@ package tests;
 
 import java.util.HashSet;
 import java.util.List;
-import org.apache.log4j.Logger;
 
 import org.json.simple.JSONObject;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
 import utils.APIExecutor;
 import utils.CURelationshipIndex;
 import utils.ExcelUtils;
-import utils.LoggerImplemetation;
 import utils.UpdateExcelSheet;
 import validators.EbookValidator;
+import validators.RentalValidator;
 
-public class CoursewareEBK_RelatedProductISBN {
-	Logger logger = LoggerImplemetation.logConfig("CoursewareEBK_RelatedProductISBN.class");
+public class CoursewareRental_RelatedProductISBN {
 	static int testCount = 0;
 	String inputFilePath;
 	String sheetName;
@@ -25,11 +24,10 @@ public class CoursewareEBK_RelatedProductISBN {
 	int startRow, startCol, totalCols, maxRows;
 	String reportFilePath;
 	String reportSheetName;
-	
-			
+	//Logger logger = LoggerImplemetation.logConfig("CoursewareEBK_RelatedProductISBN.class");
 	@BeforeClass
 	public void init_vars(){
-		sheetName = "CoursewaretoEBK";
+		sheetName = "CoursewaretoRental";
 		startCol = 0;
 		totalCols = 16;
 		//endPoint = "Product";
@@ -42,7 +40,7 @@ public class CoursewareEBK_RelatedProductISBN {
 		maxRows=2;
 		inputFilePath="D:\\Project\\CU Catalog\\Files\\cu relationships.xlsx";
 		reportFilePath =  "D:\\test.xlsx";
-		reportSheetName = "CoursewareEBK_RelatedProductISB";
+		reportSheetName = "CoursewareRental_RelatedProductISBN";
 		UpdateExcelSheet.createFile(reportFilePath, reportSheetName);
 	}
 	
@@ -52,6 +50,7 @@ public class CoursewareEBK_RelatedProductISBN {
 		List<List<String>> testObjArray = excelUtils.getTableArray(startRow, maxRows);
 		Object [][] o=new Object[testObjArray.size()][];
 		for(int itr=0;itr<testObjArray.size();itr++){
+			System.out.println("testarray is====== " + testObjArray.get(itr));
 			List<String> list=testObjArray.get(itr);
 			o[itr]=new Object[1];
 			o[itr][0]=list.toArray();
@@ -66,15 +65,17 @@ public class CoursewareEBK_RelatedProductISBN {
 		 for(int i=0; i<varArg.length;i++){
 			 list[i]=varArg[i].toString();
 		 }
-		 
 		  testCount++;
 		  boolean noresponseflag=false;
 	      HashSet<String> failureResponse = null;
-	      System.out.println("product Stating Test Number : " + testCount);
+	      System.out.println("RELATED_PRODUCT_ISBN Stating Test Number : " + testCount);
 	      try {
+	    	  System.out.println("RELATED_PRODUCT_ISBN value======  " + list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()]);
 	    	   JSONObject jsonObject = APIExecutor.executeProductAPI(list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()]);
-	    	   EbookValidator Validator = new EbookValidator(jsonObject);
-	    	   Validator.verifyRelatedProductIsbn13InRecords(list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()],list[CURelationshipIndex.PARENT_ISBN.getIndex()],list[CURelationshipIndex.PARENT_CU_INCLUSION.getIndex()],list[CURelationshipIndex. RELATED_PRODUCT_CU_INCLUSION.getIndex()]);
+	    	   //JSONObject jsonObject = APIExecutor.executeProductAPI(list[4]);
+
+	    	   RentalValidator Validator = new RentalValidator(jsonObject);
+	    	   Validator.verifyRecordForQueriedRelatedProductISBN(list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()],list[CURelationshipIndex.PARENT_ISBN.getIndex()],list[CURelationshipIndex.PARENT_CU_INCLUSION.getIndex()],list[CURelationshipIndex. RELATED_PRODUCT_CU_INCLUSION.getIndex()]);
 	    	   failureResponse = Validator.failureResult();
 	           System.out.println("failue response is ====>" + failureResponse);
 	           Assert.assertTrue(failureResponse.isEmpty(),"For " + list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()] + " failure response is " + failureResponse);

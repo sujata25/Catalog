@@ -1,0 +1,183 @@
+{
+	"status": {
+		"responseCode": 0,
+		"message": "OK"
+	},
+	"params": {
+		"dims": [
+			"Unlimited"
+		],
+		"expanded": [
+			"true"
+		],
+		"q": [
+			"9781285020013"
+		]
+	},
+	"dimensions": null,
+	"totalRecords": 2,
+	"records": [
+		{
+			"title": "eBook: Precalculus",
+			"epi": "1072001594699880763332546619887947394",
+			"isbn13": "9781285020013",
+			"isbn10": "1285020014",
+			"edition": "1st",
+			"newFlag": false,
+			"authorLast": null,
+			"authors": [
+				{
+					"bio": " ",
+					"name": "Karla Neal",
+					"id": "121352",
+					"affiliates": [
+						"Louisiana State University"
+					],
+					"imageUrl": "http://s-www.cengage.com/covers/imageServlet?contributor_id=121352"
+				},
+				{
+					"bio": " ",
+					"name": "R. David Gustafson",
+					"id": "883",
+					"affiliates": [
+						"Rock Valley College (Emeritus)"
+					],
+					"imageUrl": "http://s-www.cengage.com/covers/imageServlet?contributor_id=883"
+				},
+				{
+					"bio": " ",
+					"name": "Jeff Hughes",
+					"id": "123879",
+					"affiliates": [
+						"Hinds Community College"
+					],
+					"imageUrl": "http://s-www.cengage.com/covers/imageServlet?contributor_id=123879"
+				}
+			],
+			"metaDescription": null,
+			"metaKeywords": null,
+			"pacIsbn10": null,
+			"pacIsbn13": null,
+			"copyrightYear": "2013",
+			"lowestPrice": null,
+			"smpDescription": null,
+			"pubDate": "2012-02-06",
+			"publishAvailability": "Published",
+			"subtitle": null,
+			"unlimited": true,
+			"dims": {
+				"platforms": null
+			},
+			"cuRecIsbns": [
+				"9780357087091",
+				"9780357087220",
+				"9780357087237",
+				"9780357162217",
+				"9780357162347",
+				"9780357166307",
+				"9780357170120",
+				"9780357171172",
+				"9781285469096",
+				"9781305681118",
+				"9781305794719",
+				"9781305799059",
+				"9781337000819",
+				"9781337654111"
+			],
+			"fulfillmentTypes": null,
+			"cuEBookIsbns": null,
+			"digitalOptions": null,
+			"formats": null,
+			"printRentals": null,
+			"expandedPlatforms": null
+		},
+		{
+			"title": "WebAssign for Precalculus",
+			"epi": "832162531110638492413817950781589947492",
+			"isbn13": "9781337769716",
+			"isbn10": "1337769711",
+			"edition": "1st",
+			"newFlag": false,
+			"authorLast": null,
+			"authors": [
+				{
+					"bio": " ",
+					"name": "Karla Neal",
+					"id": "121352",
+					"affiliates": [
+						"Louisiana State University"
+					],
+					"imageUrl": "http://s-www.cengage.com/covers/imageServlet?contributor_id=121352"
+				},
+				{
+					"bio": " ",
+					"name": "R. David Gustafson",
+					"id": "883",
+					"affiliates": [
+						"Rock Valley College (Emeritus)"
+					],
+					"imageUrl": "http://s-www.cengage.com/covers/imageServlet?contributor_id=883"
+				},
+				{
+					"bio": " ",
+					"name": "Jeff Hughes",
+					"id": "123879",
+					"affiliates": [
+						"Hinds Community College"
+					],
+					"imageUrl": "http://s-www.cengage.com/covers/imageServlet?contributor_id=123879"
+				}
+			],
+			"metaDescription": null,
+			"metaKeywords": null,
+			"pacIsbn10": null,
+			"pacIsbn13": null,
+			"copyrightYear": "2013",
+			"lowestPrice": null,
+			"smpDescription": "WebAssigols.",
+			"pubDate": "2017-07-25",
+			"publishAvailability": "Published",
+			"subtitle": null,
+			"unlimited": true,
+			"dims": {
+				"platforms": null
+			},
+			"cuRecIsbns": [
+				"9780357087091",
+				"9780357087220",
+				"9780357087237",
+				"9780357162217",
+				"9780357162347",
+				"9780357166307",
+				"9780357170120",
+				"9780357171172",
+				"9781285469096",
+				"9781305681118",
+				"9781305794719",
+				"9781305799059",
+				"9781337000819",
+				"9781337654111"
+			],
+			"fulfillmentTypes": null,
+			"cuEBookIsbns": [
+				"9781285020013"
+			],
+			"digitalOptions": null,
+			"formats": null,
+			"printRentals": null,
+			"expandedPlatforms": null
+		}
+	],
+	"guidedNavigation": [],
+	"selectedRefinements": [
+		{
+			"id": 184,
+			"name": "Unlimited",
+			"multiselect": false,
+			"dimensionName": "Catalog",
+			"dimensionId": 3
+		}
+	],
+	"searchReports": null,
+	"redirect": "/c/precalculus-1e-neal/9781285020013?searchIsbn=9781285020013"
+}

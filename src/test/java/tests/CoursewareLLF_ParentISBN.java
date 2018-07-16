@@ -2,22 +2,22 @@ package tests;
 
 import java.util.HashSet;
 import java.util.List;
-import org.apache.log4j.Logger;
 
 import org.json.simple.JSONObject;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
 import utils.APIExecutor;
 import utils.CURelationshipIndex;
 import utils.ExcelUtils;
-import utils.LoggerImplemetation;
 import utils.UpdateExcelSheet;
 import validators.EbookValidator;
+import validators.LLFValidator;
 
-public class CoursewareEBK_RelatedProductISBN {
-	Logger logger = LoggerImplemetation.logConfig("CoursewareEBK_RelatedProductISBN.class");
+public class CoursewareLLF_ParentISBN {
+	
 	static int testCount = 0;
 	String inputFilePath;
 	String sheetName;
@@ -26,10 +26,9 @@ public class CoursewareEBK_RelatedProductISBN {
 	String reportFilePath;
 	String reportSheetName;
 	
-			
 	@BeforeClass
 	public void init_vars(){
-		sheetName = "CoursewaretoEBK";
+		sheetName = "CoursewaretoLLF";
 		startCol = 0;
 		totalCols = 16;
 		//endPoint = "Product";
@@ -39,10 +38,10 @@ public class CoursewareEBK_RelatedProductISBN {
 		//reportFilePath = System.getProperty("reportFilePath");
 		//inputFilePath="D:\\Project\\CU Catalog\\Files\\cu relationships extract with type fields and bundles_070318.xlsx";
 		startRow=2;
-		maxRows=2;
+		maxRows=8;
 		inputFilePath="D:\\Project\\CU Catalog\\Files\\cu relationships.xlsx";
 		reportFilePath =  "D:\\test.xlsx";
-		reportSheetName = "CoursewareEBK_RelatedProductISB";
+		reportSheetName = "CoursewareLLF_ParentISBN";
 		UpdateExcelSheet.createFile(reportFilePath, reportSheetName);
 	}
 	
@@ -61,38 +60,38 @@ public class CoursewareEBK_RelatedProductISBN {
 	}
 	
 	 @Test(dataProvider="Authentication")
-	  public void Test01EBKRelatedProductISNB(Object[] varArg)throws  Exception{
+	  public void Test01EBKParentISNB(Object[] varArg)throws  Exception{
 		 String [] list=new String [varArg.length];
 		 for(int i=0; i<varArg.length;i++){
 			 list[i]=varArg[i].toString();
 		 }
-		 
 		  testCount++;
 		  boolean noresponseflag=false;
 	      HashSet<String> failureResponse = null;
 	      System.out.println("product Stating Test Number : " + testCount);
 	      try {
-	    	   JSONObject jsonObject = APIExecutor.executeProductAPI(list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()]);
-	    	   EbookValidator Validator = new EbookValidator(jsonObject);
-	    	   Validator.verifyRelatedProductIsbn13InRecords(list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()],list[CURelationshipIndex.PARENT_ISBN.getIndex()],list[CURelationshipIndex.PARENT_CU_INCLUSION.getIndex()],list[CURelationshipIndex. RELATED_PRODUCT_CU_INCLUSION.getIndex()]);
+	    	   JSONObject jsonObject = APIExecutor.executeProductAPI(list[CURelationshipIndex.PARENT_ISBN.getIndex()]);
+	    	   LLFValidator Validator = new LLFValidator(jsonObject);
+	    	   Validator.verifyRecordForQueriedParentISBN(list[CURelationshipIndex.PARENT_ISBN.getIndex()],list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()],list[CURelationshipIndex.PARENT_CU_INCLUSION.getIndex()],list[CURelationshipIndex. RELATED_PRODUCT_CU_INCLUSION.getIndex()]);
 	    	   failureResponse = Validator.failureResult();
-	           System.out.println("failue response is ====>" + failureResponse);
-	           Assert.assertTrue(failureResponse.isEmpty(),"For " + list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()] + " failure response is " + failureResponse);
+	           System.out.println("failure response is ====>" + failureResponse);
+	           Assert.assertTrue(failureResponse.isEmpty(),"For " + list[CURelationshipIndex.PARENT_ISBN.getIndex()] + " failure response is " + failureResponse);
 	      }catch(Exception e){
 	    	 noresponseflag=true;
-	         Assert.assertTrue(failureResponse.isEmpty(),"For " + list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()] + " failure response is " + failureResponse);
+	         Assert.assertTrue(failureResponse.isEmpty(),"For " + list[CURelationshipIndex.PARENT_ISBN.getIndex()] + " failure response is " + failureResponse);
 	      }finally{
 	    	if(noresponseflag){
-				UpdateExcelSheet.updateNoResponseInSheet(sheetName, endPoint, list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()],reportSheetName);
+				UpdateExcelSheet.updateNoResponseInSheet(sheetName, endPoint, list[CURelationshipIndex.PARENT_ISBN.getIndex()],reportSheetName);
 	        }else{
 	        	if(failureResponse.isEmpty()){
-	    			UpdateExcelSheet.updatePassInSheet(sheetName, endPoint, list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()],reportSheetName);
+	    			UpdateExcelSheet.updatePassInSheet(sheetName, endPoint, list[CURelationshipIndex.PARENT_ISBN.getIndex()],reportSheetName);
 	    		}else{
-	    			UpdateExcelSheet.updateFailInSheet(sheetName, endPoint, list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()], failureResponse,reportSheetName);
+	    			UpdateExcelSheet.updateFailInSheet(sheetName, endPoint, list[CURelationshipIndex.PARENT_ISBN.getIndex()], failureResponse,reportSheetName);
 	    		}
 	        }
 	      }
 	        
 	  }
- 
+
+	 
 }

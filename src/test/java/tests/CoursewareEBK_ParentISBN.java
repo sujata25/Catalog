@@ -2,7 +2,7 @@ package tests;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 import org.json.simple.JSONObject;
 import org.testng.Assert;
@@ -29,7 +29,7 @@ public class CoursewareEBK_ParentISBN {
 	
 	@BeforeClass
 	public void init_vars(){
-		sheetName = "CURelationships";
+		sheetName = "CoursewaretoEBK";
 		startCol = 0;
 		totalCols = 16;
 		//endPoint = "Product";
@@ -39,8 +39,8 @@ public class CoursewareEBK_ParentISBN {
 		//reportFilePath = System.getProperty("reportFilePath");
 		//inputFilePath="D:\\Project\\CU Catalog\\Files\\cu relationships extract with type fields and bundles_070318.xlsx";
 		startRow=2;
-		maxRows=8;
-		inputFilePath="D:\\Project\\CU Catalog\\Files\\testdata.xlsx";
+		maxRows=1;
+		inputFilePath="D:\\Project\\CU Catalog\\Files\\cu relationships.xlsx";
 		reportFilePath =  "D:\\test.xlsx";
 		reportSheetName = "CoursewareEBK_ParentISBN";
 		UpdateExcelSheet.createFile(reportFilePath, reportSheetName);

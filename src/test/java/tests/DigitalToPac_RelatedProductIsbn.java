@@ -13,10 +13,10 @@ import utils.APIExecutor;
 import utils.CURelationshipIndex;
 import utils.ExcelUtils;
 import utils.UpdateExcelSheet;
-import validators.EbookValidator;
+import validators.DigitalToPacValidator;
 import validators.RentalValidator;
 
-public class CoursewareRental_RelatedProductISBN {
+public class DigitalToPac_RelatedProductIsbn {
 	static int testCount = 0;
 	String inputFilePath;
 	String sheetName;
@@ -27,7 +27,7 @@ public class CoursewareRental_RelatedProductISBN {
 	//Logger logger = LoggerImplemetation.logConfig("CoursewareEBK_RelatedProductISBN.class");
 	@BeforeClass
 	public void init_vars(){
-		sheetName = "CoursewaretoRental";
+		sheetName = "DigitaltoPAC";
 		startCol = 0;
 		totalCols = 16;
 		//endPoint = "Product";
@@ -36,8 +36,8 @@ public class CoursewareRental_RelatedProductISBN {
 		//maxRows = Integer.parseInt(System.getProperty("maxRows"));
 		//reportFilePath = System.getProperty("reportFilePath");
 		//inputFilePath="D:\\Project\\CU Catalog\\Files\\cu relationships extract with type fields and bundles_070318.xlsx";
-		startRow=1;
-		maxRows=2;
+		startRow=2;
+		maxRows=8;
 		inputFilePath="D:\\Project\\CU Catalog\\Files\\cu relationships.xlsx";
 		reportFilePath =  "D:\\test.xlsx";
 		reportSheetName = "CoursewareRental_RelatedProductISBN";
@@ -50,7 +50,6 @@ public class CoursewareRental_RelatedProductISBN {
 		List<List<String>> testObjArray = excelUtils.getTableArray(startRow, maxRows);
 		Object [][] o=new Object[testObjArray.size()][];
 		for(int itr=0;itr<testObjArray.size();itr++){
-			System.out.println("testarray is====== " + testObjArray.get(itr));
 			List<String> list=testObjArray.get(itr);
 			o[itr]=new Object[1];
 			o[itr][0]=list.toArray();
@@ -68,13 +67,10 @@ public class CoursewareRental_RelatedProductISBN {
 		  testCount++;
 		  boolean noresponseflag=false;
 	      HashSet<String> failureResponse = null;
-	      System.out.println("RELATED_PRODUCT_ISBN Stating Test Number : " + testCount);
+	      System.out.println("product Stating Test Number : " + testCount);
 	      try {
-	    	  System.out.println("RELATED_PRODUCT_ISBN value======  " + list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()]);
 	    	   JSONObject jsonObject = APIExecutor.executeProductAPI(list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()]);
-	    	   //JSONObject jsonObject = APIExecutor.executeProductAPI(list[4]);
-
-	    	   RentalValidator Validator = new RentalValidator(jsonObject);
+	    	   DigitalToPacValidator Validator = new DigitalToPacValidator(jsonObject);
 	    	   Validator.verifyRecordForQueriedRelatedProductISBN(list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()],list[CURelationshipIndex.PARENT_ISBN.getIndex()],list[CURelationshipIndex.PARENT_CU_INCLUSION.getIndex()],list[CURelationshipIndex. RELATED_PRODUCT_CU_INCLUSION.getIndex()]);
 	    	   failureResponse = Validator.failureResult();
 	           System.out.println("failue response is ====>" + failureResponse);
@@ -83,9 +79,6 @@ public class CoursewareRental_RelatedProductISBN {
 	    	 noresponseflag=true;
 	         Assert.assertTrue(failureResponse.isEmpty(),"For " + list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()] + " failure response is " + failureResponse);
 	      }finally{
-	    	  if(failureResponse.toString().equalsIgnoreCase("SKIPPED")){
-	    		  noresponseflag=true;
-	    	  }
 	    	if(noresponseflag){
 				UpdateExcelSheet.updateNoResponseInSheet(sheetName, endPoint, list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()],reportSheetName);
 	        }else{

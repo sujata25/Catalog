@@ -2,7 +2,6 @@ package tests;
 
 import java.util.HashSet;
 import java.util.List;
-import org.apache.log4j.Logger;
 
 import org.json.simple.JSONObject;
 import org.testng.Assert;
@@ -13,12 +12,11 @@ import org.testng.annotations.Test;
 import utils.APIExecutor;
 import utils.CURelationshipIndex;
 import utils.ExcelUtils;
-import utils.LoggerImplemetation;
 import utils.UpdateExcelSheet;
-import validators.EbookValidator;
+import validators.DigitalToPacValidator;
+import validators.LLFValidator;
 
-public class CoursewareEBK_ParentISBN {
-	Logger logger = LoggerImplemetation.logConfig("CoursewareEBK_ParentISBN.class");
+public class DigitalToPac_ParentISBN {
 	static int testCount = 0;
 	String inputFilePath;
 	String sheetName;
@@ -29,7 +27,7 @@ public class CoursewareEBK_ParentISBN {
 	
 	@BeforeClass
 	public void init_vars(){
-		sheetName = "CoursewaretoEBK";
+		sheetName = "DigitaltoPAC";
 		startCol = 0;
 		totalCols = 16;
 		//endPoint = "Product";
@@ -39,10 +37,10 @@ public class CoursewareEBK_ParentISBN {
 		//reportFilePath = System.getProperty("reportFilePath");
 		//inputFilePath="D:\\Project\\CU Catalog\\Files\\cu relationships extract with type fields and bundles_070318.xlsx";
 		startRow=2;
-		maxRows=1;
+		maxRows=8;
 		inputFilePath="D:\\Project\\CU Catalog\\Files\\cu relationships.xlsx";
 		reportFilePath =  "D:\\test.xlsx";
-		reportSheetName = "CoursewareEBK_ParentISBN";
+		reportSheetName = "CoursewareLLF_ParentISBN";
 		UpdateExcelSheet.createFile(reportFilePath, reportSheetName);
 	}
 	
@@ -70,10 +68,9 @@ public class CoursewareEBK_ParentISBN {
 		  boolean noresponseflag=false;
 	      HashSet<String> failureResponse = null;
 	      System.out.println("product Stating Test Number : " + testCount);
-	      logger.info("Stating Test Number log : ");
 	      try {
 	    	   JSONObject jsonObject = APIExecutor.executeProductAPI(list[CURelationshipIndex.PARENT_ISBN.getIndex()]);
-	    	   EbookValidator Validator = new EbookValidator(jsonObject);
+	    	   DigitalToPacValidator Validator = new DigitalToPacValidator(jsonObject);
 	    	   Validator.verifyRecordForQueriedParentISBN(list[CURelationshipIndex.PARENT_ISBN.getIndex()],list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()],list[CURelationshipIndex.PARENT_CU_INCLUSION.getIndex()],list[CURelationshipIndex. RELATED_PRODUCT_CU_INCLUSION.getIndex()]);
 	    	   failureResponse = Validator.failureResult();
 	           System.out.println("failure response is ====>" + failureResponse);

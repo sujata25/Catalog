@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Iterator;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -63,14 +64,23 @@ public class UpdateExcelSheet {
         try {
             FileInputStream inputStream = new FileInputStream(new File(filePath));
             Workbook workbook = WorkbookFactory.create(inputStream);
-
+            int rowCount = 0;
             Sheet sheet = workbook.getSheet(reportSheet);
 
             Object[][] bookData = {
                     {sourceSheet, endpoint, ISBN, "Pass" },
             };
 
-            int rowCount = sheet.getLastRowNum();
+            try{
+            	//rowCount= getLastRow(sheet);
+                //System.out.println("rowCount is===="+ rowCount);
+            	
+            	rowCount = sheet.getLastRowNum();
+                 
+            }catch(Exception e){
+            	e.printStackTrace();
+            	System.out.println("exception ");
+            }
 
             for (Object[] aBook : bookData) {
                 Row row = sheet.createRow(++rowCount);
@@ -97,6 +107,19 @@ public class UpdateExcelSheet {
         }
     }
 
+    public static int getLastRow(Sheet sheet) {
+		int rowCount = 0;
+		Iterator<Row> iter = sheet.rowIterator();
+		System.out.println("iter");
+		while (iter.hasNext()) {
+			Row r = iter.next();
+			rowCount++;
+		}
+		System.out.println("getLastRow:::" + rowCount);
+		return rowCount;
+	}
+    
+    
     public static void updateFailInSheet(String sourceSheet, String endpoint, String ISBN, HashSet<String> errors, String reportSheet) {
 
         String errorString = "";

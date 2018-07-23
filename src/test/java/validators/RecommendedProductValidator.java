@@ -33,6 +33,7 @@ public class RecommendedProductValidator {
 	  
 	  public void verifyRecordForQueriedParentISBN(String expectedParentISBNValue,String expectedRelatedProductISBNValue, String parentInclusion, String relatedProductInclusion) {
 		  try{
+			  int countCUIsbn=0;
 	        	List<Record> recordList = recommendedProduct.getRecords();
 	        	System.out.println("expectedParentISBNValue is==========="+ expectedParentISBNValue);
 	        	System.out.println("expectedRelatedProductISBNValue is=========="+ expectedRelatedProductISBNValue);
@@ -58,12 +59,20 @@ public class RecommendedProductValidator {
 			            	 }else if(!record.getIsbn13().equalsIgnoreCase(expectedParentISBNValue)){
 			 	            		failureResult.add("INCORRECT PARENT ISBN;");
 			 	             }
-	        				 if(record.getCuRecIsbns()== null || record.getCuRecIsbns().toString() == "") {
+	        				 if(record.getCuRecIsbns().isEmpty() || record.getCuRecIsbns()== null || record.getCuRecIsbns().toString() == "") {
 	        					 failureResult.add("MISSING ISBN;");
+	        				 }else if(record.getCuRecIsbns().toString().contains(expectedRelatedProductISBNValue)){
+	 	 	            		failureResult.add("INCORRECT CUREC ISBN;");
+	 	 	            	 }
+	        			 }else if((relatedProductInclusion.equalsIgnoreCase("yes")) || (relatedProductInclusion.equalsIgnoreCase(""))){
+	        				 if(record.getCuRecIsbns().isEmpty() || record.getCuRecIsbns()== null || record.getCuRecIsbns().toString() == "") {
+	        					 failureResult.add("MISSING ISBN;");
+	        				 }else if(record.getCuRecIsbns().toString().contains(expectedRelatedProductISBNValue)){
+	        					 countCUIsbn++;
+	 	 	            	 }
+	        				 if(countCUIsbn > 1){
+	        					 failureResult.add("MULTIPLE CUREC ISBN IN RECORDS;");
 	        				 }
-	        				 else if(!record.getCuRecIsbns().toString().equalsIgnoreCase(expectedRelatedProductISBNValue)){
-	 	 	            		failureResult.add("INCORRECT RELATED PRODUCT ISBN;");
-	 	 	            	}
 	        			 }
 	        		 }
 	        	}	        
@@ -82,8 +91,6 @@ public class RecommendedProductValidator {
 	        	System.out.println("parentInclusion is=========="+ parentInclusion);
 	        	System.out.println("relatedProductInclusion is==========="+ relatedProductInclusion);
 	        	
-	        	
-	        	
 	        	if (parentInclusion.equalsIgnoreCase("no")){
 	        		if(relatedProductInclusion.equalsIgnoreCase("no")){
 	        			if(!recommendedProduct.getTotalRecords().equals(0)){
@@ -95,7 +102,7 @@ public class RecommendedProductValidator {
 	        			 for (Record record:recordList){
 	        				 if(record.getIsbn13()== null || record.getIsbn13() == ""){
 			            			failureResult.add("MISSING ISBN;");
-			            	 }else if(!record.getIsbn13().equalsIgnoreCase(expectedParentISBNValue)){
+			            	 }else if(record.getIsbn13().equalsIgnoreCase(expectedParentISBNValue)){
 			 	            		failureResult.add("INCORRECT PARENT ISBN;");
 			 	             }
 	        				 
@@ -110,10 +117,16 @@ public class RecommendedProductValidator {
 	        			
 	        		}
 	        		// to be checked again
-	        		/*else if(relatedProductInclusion.equalsIgnoreCase("")){
-	        			if(recommendedProduct.getTotalRecords() >=0){
-	    	        		failureResult.add("TOTAL RECORDS NOT 0;");
-		    	        }
+	        		else if(relatedProductInclusion.equalsIgnoreCase("")){
+	        			if(recommendedProduct.getTotalRecords() !=0){
+	        				for (Record record:recordList){
+	        					if(record.getCuRecIsbns().isEmpty() || record.getCuRecIsbns()== null ){
+			            			failureResult.add("MISSING ISBN;");
+				            	}else if(!record.getCuRecIsbns().contains(expectedRelatedProductISBNValue)){
+				 	            		failureResult.add("INCORRECT RELATED PRODUCT ISBN;");
+				 	            }
+	        				}
+	    	        	}
 	        			
 	        			for (Record record:recordList){
 	        				if(record.getIsbn13()== null || record.getIsbn13() == ""){
@@ -129,31 +142,45 @@ public class RecommendedProductValidator {
 	        			
 	        			
 	        			
-	        		}*/
+	        		}
 	        	}
 	        	
 	        	
 	        	else if(parentInclusion.equalsIgnoreCase("yes")){
 	        		boolean parentFlag=false,relatedFlag=false;
-	        		 for (Record record:recordList){
-	        			 System.out.println("getIsbn13 is=======>" + record.getIsbn13());
+	        		
 	        			 if(relatedProductInclusion.equalsIgnoreCase("yes")){
-	        				 System.out.println("expec rec 1 "+ (!record.getIsbn13().contains(expectedParentISBNValue)));
-	        				 System.out.println("rec 2 "+ (!record.getIsbn13().contains(expectedRelatedProductISBNValue)));
 	        				 if(recommendedProduct.getTotalRecords() == null || recommendedProduct.getTotalRecords().toString() == ""){
 			            			failureResult.add("MISSING Total Reocrds;");
 			            	 }
 	        				 else if(recommendedProduct.getTotalRecords() != 2 || recommendedProduct.getTotalRecords() < 2 ){
 	        					 failureResult.add(" Total Reocrds count is wrong");
 	        				 }
-			 	             if((record.getIsbn13()== null || record.getIsbn13() == "")) {
-			 	            	 failureResult.add(" ISBN missing");
-		        			 } else if(record.getIsbn13()!= expectedRelatedProductISBNValue) {
-		        				 
-				 	             failureResult.add("Missing ISBN");
-		        			 }
+	        				 for (Record record:recordList){
+				 	            
+				 	             if((record.getIsbn13()== null || record.getIsbn13() == "")) {
+				 	            	 failureResult.add("MISSING ISBN");
+			        			 } else if(record.getIsbn13().toString().contains(expectedRelatedProductISBNValue)) {
+			        				  relatedFlag=true;
+			        			 }
+				 	             if((record.getIsbn13()== null || record.getIsbn13() == "")) {
+				 	            	 failureResult.add("MISSING ISBN");
+			        			 } else if(record.getIsbn13().toString().contains(expectedParentISBNValue)) {
+			        				 parentFlag=true;
+			        			 }
+				 	            
+			 	                 if(!parentFlag && relatedFlag){
+			 	                	 failureResult.add("INCORRECT PARENT ISBN");
+			 	                 }else if(parentFlag && !relatedFlag){
+			 	                	 failureResult.add("INCORRECT RELATED PRODUCT ISBN");
+			 	                 }else if(!parentFlag && !relatedFlag){
+			 	                	failureResult.add("INCORRECT PARENT ISBN; INCORRECT RELATED PRODUCT ISBN;");
+			 	                 }
+				 	            
+	        				 }
 			 	         }
 	        			 else if(relatedProductInclusion.equalsIgnoreCase("no")){
+	        				 for (Record record:recordList){
 	        				 if(record.getIsbn13()== null || record.getIsbn13() == ""){
 			            			failureResult.add("MISSING ISBN;");
 			            	 }else if(!record.getIsbn13().equalsIgnoreCase(expectedRelatedProductISBNValue)) {
@@ -162,14 +189,28 @@ public class RecommendedProductValidator {
 			            	 else if (record.getIsbn13().equalsIgnoreCase(expectedParentISBNValue)){
 			 	            		failureResult.add("INCORRECT Parent ISBN;");
 			 	             }
+	        				 }
 	        				
 	        			 }else if(relatedProductInclusion.equalsIgnoreCase("")){
-	        				 if(recommendedProduct.getTotalRecords() != 0){
+	        				 if(recommendedProduct.getTotalRecords() < 1){
 	 	    	        		failureResult.add("TOTAL RECORDS NOT 0;");
 	 		    	        }
+	        				 for (Record record:recordList){
+				 	             if((record.getIsbn13()== null || record.getIsbn13() == "")) {
+				 	            	 failureResult.add(" ISBN missing");
+			        			 } else if(record.getIsbn13().toString().contains(expectedRelatedProductISBNValue)) {
+			        				  failureResult.add("Missing ISBN");
+			        			 }
+				 	            if((record.getIsbn13()== null || record.getIsbn13() == "")) {
+				 	            	 failureResult.add(" ISBN missing");
+			        			 } else if(!record.getIsbn13().toString().contains(expectedParentISBNValue)) {
+			        				  failureResult.add("Missing ISBN");
+			        			 }
+			 	             
+	        				 }
 	        				
 	        			 }
-	        		 }
+	        		
 	        	}
 	        	
 	        }catch(Exception e) {

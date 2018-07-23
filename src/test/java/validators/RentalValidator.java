@@ -109,6 +109,11 @@ public class RentalValidator {
 		        	
 		        	if(relatedProductInclusion.equalsIgnoreCase("no")){
 		        		boolean parentFlag=false,relatedFlag=false;
+		        		if(rental.getTotalRecords()==null || rental.getTotalRecords().equals("")) {
+       					 failureResult.add(" Total Record does not exist");
+	       				 }else if(!rental.getTotalRecords().equals(1)) {
+	       					 failureResult.add("Total record missmatch");
+	       				 }
 		        		 for (Record record:recordList){
 		        			 System.out.println("getIsbn13 is=======>" + record.getIsbn13());
 		        			 if((parentInclusion.equalsIgnoreCase("yes")) || (parentInclusion.equalsIgnoreCase("no")) ){
@@ -116,12 +121,6 @@ public class RentalValidator {
 				            			failureResult.add("MISSING ISBN;");
 				            	 }else if(!record.getIsbn13().equals(expectedRelatedProductISBNValue)) {
 		        					 failureResult.add("PRODUCT ISBN EXIST IN THE RECORD");
-		        				 }
-		        				 
-		        				 if(rental.getTotalRecords()==null || rental.getTotalRecords().equals("")) {
-		        					 failureResult.add(" Total Record does not exist");
-		        				 }else if(!rental.getTotalRecords().equals(1)) {
-		        					 failureResult.add("Total record missmatch");
 		        				 }
 		        			 }
 		        		}

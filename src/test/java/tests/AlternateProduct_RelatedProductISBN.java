@@ -30,7 +30,7 @@ public class AlternateProduct_RelatedProductISBN {
 		sheetName = "CUAlternateProduct";
 		startCol = 0;
 		totalCols = 16;
-		//endPoint = "Product";
+		endPoint = "Related Product";
 		//inputFilePath = System.getProperty("inputFilePath");
 		//startRow = Integer.parseInt(System.getProperty("startRow"));
 		//maxRows = Integer.parseInt(System.getProperty("maxRows"));
@@ -40,7 +40,7 @@ public class AlternateProduct_RelatedProductISBN {
 		maxRows=6;
 		inputFilePath="D:\\Project\\CU Catalog\\Files\\cu relationships.xlsx";
 		reportFilePath =  "D:\\test.xlsx";
-		reportSheetName = "AlternateProduct_RelatedProductISBN";
+		reportSheetName = "Alternate_RelatedProduct";
 		UpdateExcelSheet.createFile(reportFilePath, reportSheetName);
 	}
 	
@@ -65,23 +65,26 @@ public class AlternateProduct_RelatedProductISBN {
 			 list[i]=varArg[i].toString();
 		 }
 		  testCount++;
-		  boolean noresponseflag=false;
+		  boolean noresponseflag=false,listValueNotEmpty=false;
 	      HashSet<String> failureResponse = null;
 	      System.out.println("product Stating Test Number : " + testCount);
 	      try {
+	    	  if(!list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()].isEmpty()){
+			   listValueNotEmpty=true; 
 	    	   JSONObject jsonObject = APIExecutor.executeProductAPI(list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()]);
 	    	   AlternateProductValidator Validator = new AlternateProductValidator(jsonObject);
 	    	   Validator.verifyRecordForQueriedRelatedProductISBN(list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()],list[CURelationshipIndex.PARENT_ISBN.getIndex()],list[CURelationshipIndex.PARENT_CU_INCLUSION.getIndex()],list[CURelationshipIndex. RELATED_PRODUCT_CU_INCLUSION.getIndex()]);
 	    	   failureResponse = Validator.failureResult();
 	           System.out.println("failue response is ====>" + failureResponse);
 	           Assert.assertTrue(failureResponse.isEmpty(),"For " + list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()] + " failure response is " + failureResponse);
+	    	  }
 	      }catch(Exception e){
 	    	 noresponseflag=true;
-	         Assert.assertTrue(failureResponse.isEmpty(),"For " + list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()] + " failure response is " + failureResponse);
+	         //Assert.assertTrue(failureResponse.isEmpty(),"For " + list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()] + " failure response is " + failureResponse);
 	      }finally{
-	    	if(noresponseflag){
+	    	if(noresponseflag && listValueNotEmpty){
 				UpdateExcelSheet.updateNoResponseInSheet(sheetName, endPoint, list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()],reportSheetName);
-	        }else{
+	    	}else if(!noresponseflag && listValueNotEmpty) {
 	        	if(failureResponse.isEmpty()){
 	    			UpdateExcelSheet.updatePassInSheet(sheetName, endPoint, list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()],reportSheetName);
 	    		}else{

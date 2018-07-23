@@ -1,5 +1,8 @@
 package validators;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -10,8 +13,6 @@ import org.json.simple.JSONObject;
 import com.google.gson.Gson;
 
 import pojo.CuBundles.*;
-
-import pojo.CuBundles.CuBundles;
 
 public class CuBundlesValidator {
 	CuBundles cubundles;
@@ -25,77 +26,88 @@ public class CuBundlesValidator {
 	
 	  @SuppressWarnings("unused")
 		public CuBundlesValidator(JSONObject jsonObject) {
-	        String jsonString = jsonObject.toJSONString();
+		    String jsonString = jsonObject.toJSONString();
 	        ResponseHandler<String> handler = new BasicResponseHandler();
 	        Gson gson = new Gson(); // Or use new GsonBuilder().create();
-	        cubundles = gson.fromJson(jsonString, CuBundles.class);
-	        failureResult= new HashSet<String>();
+ 	        cubundles = gson.fromJson(jsonString, CuBundles.class);
+	    	failureResult= new HashSet<String>();
 	    }
 	  
 	
-	  public void verifyRecordForQueriedRelatedProductISBN(String expectedParentISBNValue,String expectedRelatedProductISBNValue, String parentInclusion, String relatedProductInclusion) {
+	  public void verifyRecordForQueriedRelatedProductISBN(String expectedParentISBNValue,String expectedRelatedProductISBNValue, String parentInclusion, String relatedProductInclusion,HashMap<String,List<String>> isbnvalues) {
 		  try{
-	        	List<Record> recordList = cubundles.getRecords();
+			    int totalparentisbn = 0 ;
+			    int j = 0,i = 0,k=0;
+	        	boolean valueflag = false, sizeFlag=false;
+	        	List<Record> Isbn13 = cubundles.getRecords();
 	        	System.out.println("expectedParentISBNValue is==========="+ expectedParentISBNValue);
 	        	System.out.println("expectedRelatedProductISBNValue is=========="+ expectedRelatedProductISBNValue);
 	        	System.out.println("parentInclusion is=========="+ parentInclusion);
 	        	System.out.println("relatedProductInclusion is==========="+ relatedProductInclusion);
 	        	
-	        	if((parentInclusion.equalsIgnoreCase("") && relatedProductInclusion.equalsIgnoreCase("yes")) ||
-	    	        (parentInclusion.equalsIgnoreCase("") && relatedProductInclusion.equalsIgnoreCase("no"))){
-	                if(cubundles.getTotalRecords() != 0){
-	    	        		failureResult.add("TOTAL RECORDS NOT 0;");
-	    	        }if (!recordList.isEmpty()) {
-	    	        		failureResult.add("RECORDLIST NOT EMPTY;");
-					}
-	    	       
-	    	     }
+	        	System.out.println(" vallues are ==="+ isbnvalues.values());
+	        	List<String> isbns_from_excel= new ArrayList<String>();
+	        	 List<String> isbns_from_response= new ArrayList<String>();
+	        	 List<Record> recordList = cubundles.getRecords();
+	        	 if((parentInclusion.equalsIgnoreCase("no") && relatedProductInclusion.equalsIgnoreCase("")) ||
+	 	    	        (parentInclusion.equalsIgnoreCase("no") && relatedProductInclusion.equalsIgnoreCase("no")) ||
+	 	    	        (parentInclusion.equalsIgnoreCase("no") && relatedProductInclusion.equalsIgnoreCase("yes"))	){
+	        		 for(Record record:recordList){
+	        			 if(record.getIsbn13()== null || record.getIsbn13() == ""){
+		            			failureResult.add("MISSING ISBN;");
+		            	 }else if(record.getIsbn13().equalsIgnoreCase(expectedParentISBNValue)){
+		 	            		failureResult.add("INCORRECT ISBN;");
+		 	             }
+	 	             }
+	        		 
+	 	               
+	 	    	 }else if((parentInclusion.equalsIgnoreCase("yes") && relatedProductInclusion.equalsIgnoreCase("")) ||
+		 	    	        (parentInclusion.equalsIgnoreCase("yes") && relatedProductInclusion.equalsIgnoreCase("no")) ||
+		 	    	        (parentInclusion.equalsIgnoreCase("yes") && relatedProductInclusion.equalsIgnoreCase("yes"))	){
+	 	    		//iterating over values only
+	 	        	
+	 	        	for (List<String> value : isbnvalues.values()) {
+	 	        	    totalparentisbn = value.size();
+	 	        	    System.out.println(value.size());
+	 	        	    for (i = 0; i < value.size(); i++) {
+	 	        	        System.out.println(value.get(i));
+	 	        	        isbns_from_excel.add(value.get(i));
+	 	        	    }
+	 	        	}
+
+	 	             if(cubundles.getTotalRecords() != totalparentisbn){
+	 		        		failureResult.add("TOTAL RECORDS NOT EQUAL TO PARENT ");
+	 		        }
+	 	             
+	 	             for(Record record:recordList){
+	 	            	 isbns_from_response.add(record.getIsbn13());
+	 	             }
+	 	             
+	 	             Collections.sort(isbns_from_excel);
+	 	             Collections.sort(isbns_from_response);
+	 	             System.out.println("isbns_from_excel--"+isbns_from_excel);
+	 	            System.out.println("isbns_from_response--"+isbns_from_response);
+	 	            
+	 	           /* if(isbns_from_excel.size() != isbns_from_response.size()) {
+	 	            	failureResult.add("PARENT ISBN COUNT AND TOTAL RECORD COUNT IS NOT EQUAL");
+	 	            } */
+	 	            
+	 	           
+	 	            for(int m=0;m<isbns_from_excel.size();m++) {
+	 	            	if(!(isbns_from_excel.get(m).equals(isbns_from_response.get(m)))) {
+	 	            		failureResult.add("PARENT ISBN DOES NOT MATCH ISBN13");
+	 	            	}
+	 	            }
+		 	     }
+	        	 
+	        	 
+	        	 
 	        	
-	        	if(parentInclusion.equalsIgnoreCase("no")){
-	        		boolean parentFlag=false,relatedFlag=false;
-	        		 for (Record record:recordList){
-	        			 System.out.println("getIsbn13 is=======>" + record.getIsbn13());
-	        			 if(relatedProductInclusion.equalsIgnoreCase("yes")){
-	        				 if(record.getIsbn13()== null || record.getIsbn13().equals("")){
-			            			failureResult.add("MISSING ISBN;");
-			            	 }/*else if((!record.getIsbn13().contains(expectedParentISBNValue)) && (!record.getIsbn13().contains(expectedRelatedProductISBNValue))){
-			 	            		failureResult.add("INCORRECT ISBN;");
-			 	             }*/
-	        				 else if(record.getIsbn13().equals(expectedRelatedProductISBNValue)) {
-	        					 failureResult.add("PRODUCT ISBN EXIST IN THE RECORD");
-	        				 }
-	        				 
-	        				 if(cubundles.getTotalRecords()==null || cubundles.getTotalRecords().equals("")) {
-	        					 failureResult.add(" Total Record does not exist");
-	        				 }
-	        				 
-	        				 else if(!cubundles.getTotalRecords().equals(1)) {
-	        					 failureResult.add("Total record missmatch");
-	        				 }
-	        				 
-	        				 
-	        			 }if(relatedProductInclusion.equalsIgnoreCase("no")){
-	        				 if(record.getIsbn13()== null || record.getIsbn13().equals("")){
-			            			failureResult.add("MISSING ISBN;");
-			            	 }/*else if((!record.getIsbn13().contains(expectedParentISBNValue)) && (!record.getIsbn13().contains(expectedRelatedProductISBNValue))){
-			 	            		failureResult.add("INCORRECT ISBN;");
-			 	             }*/
-	        				 else if(record.getIsbn13().equals(expectedRelatedProductISBNValue)) {
-	        					 failureResult.add("PRODUCT ISBN EXIST IN THE RECORD");
-	        				 }
-	        				 
-	        				 if(cubundles.getTotalRecords()==null || cubundles.getTotalRecords().equals("")) {
-	        					 failureResult.add(" Total Record does not exist");
-	        				 }
-	        				 
-	        				 else if(!cubundles.getTotalRecords().equals("1")) {
-	        					 failureResult.add("Total record missmatch");
-	        				 }	        				
-	        			 }
-	        		}
-	        	}
+
+	        	
 	        	
 	        }catch(Exception e) {
+	        	System.out.println("verify record ");
 	            e.printStackTrace();
 	        }
 	  }

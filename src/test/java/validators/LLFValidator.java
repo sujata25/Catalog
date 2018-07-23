@@ -94,6 +94,9 @@ public class LLFValidator {
 	        	
 	        	if(relatedProductInclusion.equalsIgnoreCase("no")){
 	        		boolean parentFlag=false,relatedFlag=false;
+	        		if(llf.getTotalRecords() != 1) {
+   					 failureResult.add("TOTAL RECORD MISMATCH");
+   				 	}
 	        		 for (Record record:recordList){
 	        			 System.out.println("getIsbn13 is=======>" + record.getIsbn13());
 	        			 if((parentInclusion.equalsIgnoreCase("yes")) || (parentInclusion.equalsIgnoreCase("no"))){
@@ -102,9 +105,7 @@ public class LLFValidator {
 			            	 }else if(!record.getIsbn13().equals(expectedRelatedProductISBNValue)) {
 	        					 failureResult.add("INCORRECT RELATED PRODUCT ISBN");
 	        				 }
-	        				 if(llf.getTotalRecords() != 1) {
-	        					 failureResult.add("TOTAL RECORD MISMATCH");
-	        				 }
+	        				 
 	        			}
 	        		}
 	        	}

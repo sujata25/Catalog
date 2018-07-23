@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,13 +26,14 @@ public class ExcelUtils {
     private String sheetName;
     List<String> header;
     List<List<String>>dataList;
+    HashMap<String, List<String>> dataList1;
 
     public ExcelUtils(String path, String sheetName) {
         this.path = path;
         this.sheetName = sheetName;
     }
     
-    public List<List<String>> getTableArray(int startRow, int maxRows) throws Exception {
+    public List<List<String>> getTableArray(int startRow, int endRow) throws Exception {
         try {
             FileInputStream ExcelFile = new FileInputStream(path);
             Workbook  workbook = StreamingReader.builder()
@@ -43,17 +45,15 @@ public class ExcelUtils {
             dataList=new ArrayList<>(); 
   		   	 for(Row r:ExcelWSheet){ 
   		   		// if(index>=1 && startRow>=r.getRowNum() && maxRows>0){  
-  		   			 
-	  		   		if(index>=1 && maxRows>0){
+  	  	           if(startRow<=r.getRowNum() && endRow>=r.getRowNum())
+  	  	           { 
+	  		   		//if(index>=1 && maxRows>0){
 	  		       		List<String> data=new ArrayList<String>();
-  		       			//System.out.println("data is:" + index);
   		       			int lastCell=r.getLastCellNum();
 	  		       		int startCell=r.getFirstCellNum();
 	  		       		int length=lastCell-startCell;
-	  		       		//System.out.println("length:"+length);
 	  		       		for(int cellItr=0;cellItr<length;cellItr++) {
 	                      Cell c=r.getCell(cellItr, MissingCellPolicy.CREATE_NULL_AS_BLANK); 
-		  		       			//System.out.println("index:"+ c.getColumnIndex()+"cell value is===  " + c.getStringCellValue().trim());
 		  		       			if(c!=null){
 		  		       			 data.add(c.getStringCellValue());	
 		  		       			}else{
@@ -61,9 +61,11 @@ public class ExcelUtils {
 		  		       			}
 		  		       		 }
 		  		       		dataList.add(data);
-		  		       	maxRows--;
-		  		   	}  		   		
-	       	   index++;
+		  		       	//endRow--;
+		  		   	} else if(endRow<r.getRowNum()){
+						 break; 
+					}		   		
+	       	  // index++;
 	       	}       
         } 
         catch (FileNotFoundException e){
@@ -79,61 +81,44 @@ public class ExcelUtils {
     }
  
     
+		 public HashMap<String,List<String>> getCUMap(String relatedValue) throws Exception {
+		         List<String>  datafetch = null;
+		         HashMap<String,List<String>> dataList2 = new HashMap<String,List<String>>(); 
+				 try {
+		            FileInputStream ExcelFile = new FileInputStream(path);
+		            Workbook  workbook = StreamingReader.builder().rowCacheSize(100).bufferSize(4096).open(ExcelFile); 
+		            ExcelWSheet = workbook.getSheet(sheetName);
+		            int index=0,rowItr=0;
+		            datafetch=new ArrayList<String>();
+		            for(Row r:ExcelWSheet){ 
+		  		       			Cell c=r.getCell(5, MissingCellPolicy.CREATE_NULL_AS_BLANK); 
+		  		       			if(c!=null){
+		  		       				   if(r.getCell(5).getStringCellValue().equalsIgnoreCase(relatedValue)){
+		  		       					  	Cell c1=r.getCell(0, MissingCellPolicy.CREATE_NULL_AS_BLANK);
+			  		       					if(c1!=null){
+			  		       					datafetch.add(r.getCell(0).getStringCellValue());	
+			  		       					}
+				  		       			}
+		  		       			}
+		  		       			      
+							} 
+		  		   dataList2.put(relatedValue,datafetch);
+		  		   System.out.println("dataList2 ==========>" + dataList2);
+				}
+		        catch (FileNotFoundException e){
+		            System.out.println("Could not read the Excel sheet");
+		            e.printStackTrace();
+		        }
+		        catch (IOException e){
+		            System.out.println("Could not read the Excel sheet");
+		            e.printStackTrace();
+		        }
+				
+				return dataList2;
+		   }
     
-   /* public List<List<String>> getTableArray(int startRow, int maxRows) throws Exception {
-        Map<Object,Object> mapObject =null;
-        try {
-            FileInputStream ExcelFile = new FileInputStream(path);
-            Workbook  workbook = StreamingReader.builder()
-                    .rowCacheSize(100)    
-                    .bufferSize(4096)     
-                    .open(ExcelFile); 
-            ExcelWSheet = workbook.getSheet(sheetName);
-            //String CellData = "";
-            int index=0,rowItr=0;
-            dataList=new ArrayList<>(); 
-  		   	 for(Row r:ExcelWSheet){ 
-	  		   		if(index>=1 && maxRows>0){
-	  		       		List<String> data1=new ArrayList<String>();
-  		       			System.out.println("data 1" + index);
-  		       			try{
-  	  		       			System.out.println("r is==" + r.getCell(2).getStringCellValue());
-  		       			}catch(Exception e){
-  		       				e.printStackTrace();
-  		       				System.out.println("exception is ========");
-  		       			}
-	  		       		for(Cell c:r){
-	  		       			System.out.println("cell value is===  " + c.getStringCellValue().trim());
-	  		       			if(c!=null){
-	  		       			 data1.add(c.getStringCellValue());	
-	  		       			}else{
-	  		       				data1.add(" ");
-	  		       			}
-	  		       			
-	  		       			if(c.getStringCellValue().trim() == null || c.getStringCellValue().trim() ==""){
-	  		       				data1.add("null");
-	  		       			}else{
-	  		       				data1.add(c.getStringCellValue());
+    
+    
 
-	  		       			}
-	  		       		 }
-	  		       		dataList.add(data1);
-	  		       	maxRows--;
-	  		   		}  		   		
-	       	   index++;
-	       	}       
-            
-	    } 
-        catch (FileNotFoundException e){
-            System.out.println("Could not read the Excel sheet");
-            e.printStackTrace();
-        }
-        catch (IOException e){
-            System.out.println("Could not read the Excel sheet");
-            e.printStackTrace();
-        }
-		return dataList;
-        
-    }*/
- 
+    
 }

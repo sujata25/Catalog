@@ -29,20 +29,20 @@ public class CoursewareEBK_RelatedProductISBN {
 			
 	@BeforeClass
 	public void init_vars(){
-		sheetName = "CoursewaretoEBK";
+		sheetName = "CoursewareToEBK";
 		startCol = 0;
-		totalCols = 16;
-		//endPoint = "Product";
+		totalCols = 8;
+		endPoint = "Related Product";
 		//inputFilePath = System.getProperty("inputFilePath");
 		//startRow = Integer.parseInt(System.getProperty("startRow"));
 		//maxRows = Integer.parseInt(System.getProperty("maxRows"));
 		//reportFilePath = System.getProperty("reportFilePath");
 		//inputFilePath="D:\\Project\\CU Catalog\\Files\\cu relationships extract with type fields and bundles_070318.xlsx";
-		startRow=2;
-		maxRows=2;
-		inputFilePath="D:\\Project\\CU Catalog\\Files\\cu relationships.xlsx";
+		startRow=1;
+		maxRows=2966;
+		inputFilePath="D:\\Project\\CU Catalog\\Files\\19_july_2018\\cucatalog.xlsx";
 		reportFilePath =  "D:\\test.xlsx";
-		reportSheetName = "CoursewareEBK_RelatedProductISB";
+		reportSheetName = "EBK_RelatedProduct";
 		UpdateExcelSheet.createFile(reportFilePath, reportSheetName);
 	}
 	
@@ -68,23 +68,26 @@ public class CoursewareEBK_RelatedProductISBN {
 		 }
 		 
 		  testCount++;
-		  boolean noresponseflag=false;
+		  boolean noresponseflag=false,listValueNotEmpty=false;
 	      HashSet<String> failureResponse = null;
 	      System.out.println("product Stating Test Number : " + testCount);
 	      try {
-	    	   JSONObject jsonObject = APIExecutor.executeProductAPI(list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()]);
-	    	   EbookValidator Validator = new EbookValidator(jsonObject);
-	    	   Validator.verifyRelatedProductIsbn13InRecords(list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()],list[CURelationshipIndex.PARENT_ISBN.getIndex()],list[CURelationshipIndex.PARENT_CU_INCLUSION.getIndex()],list[CURelationshipIndex. RELATED_PRODUCT_CU_INCLUSION.getIndex()]);
-	    	   failureResponse = Validator.failureResult();
-	           System.out.println("failue response is ====>" + failureResponse);
-	           Assert.assertTrue(failureResponse.isEmpty(),"For " + list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()] + " failure response is " + failureResponse);
+	    	  if(!list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()].isEmpty()){
+    	       listValueNotEmpty=true;
+    	       JSONObject jsonObject = APIExecutor.executeProductAPI(list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()]);
+   	    	   EbookValidator Validator = new EbookValidator(jsonObject);
+   	    	   Validator.verifyRelatedProductIsbn13InRecords(list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()],list[CURelationshipIndex.PARENT_ISBN.getIndex()],list[CURelationshipIndex.PARENT_CU_INCLUSION.getIndex()],list[CURelationshipIndex. RELATED_PRODUCT_CU_INCLUSION.getIndex()]);
+   	    	   failureResponse = Validator.failureResult();
+   	           System.out.println("failue response is ====>" + failureResponse);
+   	           Assert.assertTrue(failureResponse.isEmpty(),"For " + list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()] + " failure response is " + failureResponse);
+	    	  }
 	      }catch(Exception e){
 	    	 noresponseflag=true;
 	         Assert.assertTrue(failureResponse.isEmpty(),"For " + list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()] + " failure response is " + failureResponse);
 	      }finally{
-	    	if(noresponseflag){
+	    	  if(noresponseflag && listValueNotEmpty){
 				UpdateExcelSheet.updateNoResponseInSheet(sheetName, endPoint, list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()],reportSheetName);
-	        }else{
+	    	  }else if(!noresponseflag && listValueNotEmpty) {
 	        	if(failureResponse.isEmpty()){
 	    			UpdateExcelSheet.updatePassInSheet(sheetName, endPoint, list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()],reportSheetName);
 	    		}else{

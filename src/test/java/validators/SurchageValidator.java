@@ -10,10 +10,11 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.testng.Assert;
 
-import pojo.CoursewareAlternateProduct.AlternateProduct;
+import pojo.CoursewareSurcharge.*;
 
 import pojo.CoursewareSurcharge.Record;
 import pojo.CoursewareSurcharge.Surchage;
+import pojo.CuBundles.CuBundles;
 
 import java.util.HashSet;
 import java.util.List;
@@ -21,125 +22,110 @@ import java.util.List;
 
 public class SurchageValidator 
 {
-
-	 Surchage surchage;
-	 
-	 JSONObject jsonObject;
+	Surchage surchase;
 	 
 	 HashSet<String> failureResult;
-	 	List<Record> recordList;
-		public  HashSet<String> failureResult() 
-		{
+		
+		public  HashSet<String> failureResult() {
 			return failureResult;
 		}
 		
-		@SuppressWarnings("unused")
-		public SurchageValidator(JSONObject jsonObject) 
-	  {
-		  	this.jsonObject = jsonObject;
+	
+	  @SuppressWarnings("unused")
+		public SurchageValidator(JSONObject jsonObject) {
 	        String jsonString = jsonObject.toJSONString();
 	        ResponseHandler<String> handler = new BasicResponseHandler();
 	        Gson gson = new Gson(); // Or use new GsonBuilder().create();
-	        surchage = gson.fromJson(jsonString, Surchage.class);
+	        surchase = gson.fromJson(jsonString, Surchage.class);
 	        failureResult= new HashSet<String>();
-	        recordList =  surchage.getRecords();
 	    }
 	  
-
-
-	  
-	  public void verifyIsbn13InRecords(String expectedValue) 
-	  {
-	        try{
-	       
-	            for (Record record:recordList)
-	            {
-	            	if(record.getIsbn13()== null || record.getIsbn13().isEmpty()){
-	            		failureResult.add("MISSING ISBN;");
-	            	}else if(!record.getIsbn13().equalsIgnoreCase(expectedValue)){
-	            		failureResult.add("INCORRECT ISBN;");
-	            	}
-	            }
-	        }catch(Exception e) {
-	            e.printStackTrace();
-	        }
-	  }
-	  
-	  public void findTotalRecordsAndIsbn13NotEqualsQueriedISBN(String expectedValue)
-	  {
-		  if(surchage.getTotalRecords()!=1)
-		  {
-				failureResult.add("TOTAL RECORDS NOT 1");
-	       }
-		  
+	  public void verifyRecordForQueriedParentISBN(String expectedParentISBNValue,String expectedRelatedProductISBNValue, String parentInclusion, String relatedProductInclusion) {
 		  try{
-		       
-	            for (Record record:recordList)
-	            {
-	            	if(record.getIsbn13()== null || record.getIsbn13().isEmpty()){
-	            		failureResult.add("MISSING ISBN;");
-	            	}else if(record.getIsbn13().equalsIgnoreCase(expectedValue)){
-	            		failureResult.add("INCORRECT ISBN;");
-	            	}
-	            }
+	        	List<Record> recordList = surchase.getRecords();
+	        	System.out.println("expectedParentISBNValue is==========="+ expectedParentISBNValue);
+	        	System.out.println("expectedRelatedProductISBNValue is=========="+ expectedRelatedProductISBNValue);
+	        	System.out.println("parentInclusion is=========="+ parentInclusion);
+	        	System.out.println("relatedProductInclusion is==========="+ relatedProductInclusion);
+	        	
+	        	if((parentInclusion.equalsIgnoreCase("no") && relatedProductInclusion.equalsIgnoreCase("")) ||
+	    	        (parentInclusion.equalsIgnoreCase("no") && relatedProductInclusion.equalsIgnoreCase("no"))){
+	                if(surchase.getTotalRecords() != 0){
+	    	        		failureResult.add("TOTAL RECORDS NOT 0;");
+	    	        }if (!recordList.isEmpty()) {
+	    	        		failureResult.add("RECORDLIST NOT EMPTY;");
+					}
+	    	       
+	    	     }
+	        	
+	        	if(parentInclusion.equalsIgnoreCase("yes")){
+	        		boolean parentFlag=false,relatedFlag=false;
+	        		 for (Record record:recordList){
+	        			 System.out.println("getIsbn13 is=======>" + record.getIsbn13());
+	        			 if((relatedProductInclusion.equalsIgnoreCase("no")) || (relatedProductInclusion.equalsIgnoreCase(""))){
+	        				 if(record.getIsbn13()== null || record.getIsbn13().equals("")){
+			            			failureResult.add("MISSING ISBN;");
+			            	 }else if(!record.getIsbn13().equals(expectedParentISBNValue)) {
+	        					 failureResult.add("INCORRECT PARENT ISBN");
+	        				 }
+	        				 if(record.getIsbn13()== null || record.getIsbn13().equals("")){
+			            			failureResult.add("MISSING ISBN;");
+			            	 }else if(record.getIsbn13().equals(expectedRelatedProductISBNValue)) {
+	        					 failureResult.add("INCORRECT RELATED PRODUCT ISBN");
+	        				 }
+	        			 }
+	        		}
+	        	}
+	        	
 	        }catch(Exception e) {
 	            e.printStackTrace();
 	        }
-		  
 	  }
 	  
-	  public void findTotalRecordsAndEmptyRecordSetArray()
-	  {
-		  if(surchage.getTotalRecords()!=0)
-		  {
-				failureResult.add("TOTAL RECORDS NOT 0");
-	       }
-		  if (!recordList.isEmpty()) 
-		  {
-	        		failureResult.add("RECORDLIST NOT EMPTY");
-		  }
-		  
-	  }
-
-	public void verifyRecordForQueriedParentISBN(String expectedParentISBNValue,String expectedRelatedProductISBNValue, String parentInclusion, String relatedProductInclusion) 
-	{
-	 	
-    	System.out.println("expectedParentISBNValue is==========="+ expectedParentISBNValue);
-    	System.out.println("expectedRelatedProductISBNValue is=========="+ expectedRelatedProductISBNValue);
-    	System.out.println("parentInclusion is=========="+ parentInclusion);
-    	System.out.println("relatedProductInclusion is==========="+ relatedProductInclusion);
-    	
-    	
-    	if(parentInclusion.equalsIgnoreCase("yes") && (relatedProductInclusion.equals("")|| relatedProductInclusion.equalsIgnoreCase("no")))
-    	{
-    		verifyIsbn13InRecords(expectedParentISBNValue);
-    	}
-    	else if(parentInclusion.equalsIgnoreCase("no") &&( relatedProductInclusion.equals("")||relatedProductInclusion.equals("no")))
-    	{
-    		findTotalRecordsAndEmptyRecordSetArray();
-    		
-    	}
-    
-		
-	}
-
-	public void verifyRecordForQueriedRelatedProductISBN(String expectedParentISBNValue,String expectedRelatedProductISBNValue, String parentInclusion, String relatedProductInclusion) 
-	{
-		System.out.println("expectedParentISBNValue is==========="+ expectedParentISBNValue);
-    	System.out.println("expectedRelatedProductISBNValue is=========="+ expectedRelatedProductISBNValue);
-    	System.out.println("parentInclusion is=========="+ parentInclusion);
-    	System.out.println("relatedProductInclusion is==========="+ relatedProductInclusion);
-		
-		if(parentInclusion.equals("") && (relatedProductInclusion.equalsIgnoreCase("yes") || relatedProductInclusion.equalsIgnoreCase("no")))
-		{
-			findTotalRecordsAndEmptyRecordSetArray();
-		}
-		else if(parentInclusion.equalsIgnoreCase("no") && (relatedProductInclusion.equalsIgnoreCase("yes") || relatedProductInclusion.equalsIgnoreCase("no")))
-		{
-			findTotalRecordsAndIsbn13NotEqualsQueriedISBN(expectedParentISBNValue);
-		}
-	}
-
-
 	
+	  public void verifyRecordForQueriedRelatedProductISBN(String expectedParentISBNValue,String expectedRelatedProductISBNValue, String parentInclusion, String relatedProductInclusion) {
+		  try{
+	        	List<Record> recordList = surchase.getRecords();
+	        	System.out.println("expectedParentISBNValue is==========="+ expectedParentISBNValue);
+	        	System.out.println("expectedRelatedProductISBNValue is=========="+ expectedRelatedProductISBNValue);
+	        	System.out.println("parentInclusion is=========="+ parentInclusion);
+	        	System.out.println("relatedProductInclusion is==========="+ relatedProductInclusion);
+	        	
+	        	if((parentInclusion.equalsIgnoreCase("yes") && relatedProductInclusion.equalsIgnoreCase("")) ||
+	    	        (parentInclusion.equalsIgnoreCase("no") && relatedProductInclusion.equalsIgnoreCase(""))){
+	                if(surchase.getTotalRecords() != 0){
+	    	        		failureResult.add("TOTAL RECORDS NOT 0;");
+	    	        }if (!recordList.isEmpty()) {
+	    	        		failureResult.add("RECORDLIST NOT EMPTY;");
+					}
+	    	       
+	    	     }
+	        	
+	        	if(relatedProductInclusion.equalsIgnoreCase("no")){
+	        		boolean parentFlag=false,relatedFlag=false;
+	        		 if(surchase.getTotalRecords() == null) {
+    					 failureResult.add(" Total Record does not exist");
+    				 }else if(surchase.getTotalRecords() != 1) {
+    					 failureResult.add("Total record mismatch");
+    				 }
+	        		 for (Record record:recordList){
+	        			 System.out.println("getIsbn13 is=======>" + record.getIsbn13());
+	        			 if((parentInclusion.equalsIgnoreCase("yes")) || (parentInclusion.equalsIgnoreCase("no"))){
+	        				 if(record.getIsbn13()== null || record.getIsbn13().equals("")){
+			            			failureResult.add("MISSING ISBN;");
+			            	 }else if(record.getIsbn13().contains(expectedRelatedProductISBNValue)) {
+	        					 failureResult.add("PRODUCT ISBN EXIST IN THE RECORD");
+	        				 }
+	        				 
+	        				
+	        			}
+	        		}
+	        	}
+	        	
+	        }catch(Exception e) {
+	            e.printStackTrace();
+	        }
+	  }
+	  
+	  
 }

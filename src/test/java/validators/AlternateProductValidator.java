@@ -97,45 +97,48 @@ public class AlternateProductValidator {
 	        	
 	        	if(parentInclusion.equalsIgnoreCase("yes")){
 	        		boolean parentFlag=false,relatedFlag=false, totalRecord = false;
-	        		 for (Record record:recordList){
-	        			 System.out.println("getIsbn13 is=======>" + record.getIsbn13());
+	        		 
 	        			 if(relatedProductInclusion.equalsIgnoreCase("yes")){
-	        				 if(record.getIsbn13()== null || record.getIsbn13() == ""){
-			            			failureResult.add("MISSING ISBN;");
-			            	 }else if(record.getIsbn13().contains(expectedParentISBNValue)){
-	        					  parentFlag =true;
-			 	             }
+	        				 if(!(parentFlag || relatedFlag && totalRecord)){
+				 	            	failureResult.add("MISSING ISBN and total records is missing");
+				 	             }if(alternateProduct.getTotalRecords().equals(2)) {
+					 	            	failureResult.add("TOTAL RECORDS MISSING");
+					 	         }
 	        				 
-	        				 if(record.getIsbn13()== null || record.getIsbn13() == ""){
-			            			failureResult.add("MISSING ISBN;");
-			            	 }else  if(record.getIsbn13().contains(expectedRelatedProductISBNValue)){
-			 	            	relatedFlag =true;
-			 	             }
+				 	            for (Record record:recordList){
+			        				 if(record.getIsbn13()== null || record.getIsbn13() == ""){
+					            			failureResult.add("MISSING ISBN;");
+					            	 }else if(record.getIsbn13().contains(expectedParentISBNValue)){
+			        					  parentFlag =true;
+					 	             }
+			        				 
+			        				 if(record.getIsbn13()== null || record.getIsbn13() == ""){
+					            			failureResult.add("MISSING ISBN;");
+					            	 }else  if(record.getIsbn13().contains(expectedRelatedProductISBNValue)){
+					 	            	relatedFlag =true;
+					 	             }
+				 	            }
 			 	             
-			 	             if(!(parentFlag || relatedFlag && totalRecord)){
-			 	            	failureResult.add("MISSING ISBN and total records is missing");
-			 	             }if(alternateProduct.getTotalRecords().equals(2)) {
-				 	            	failureResult.add("TOTAL RECORDS MISSING");
-				 	         }
 				 	             
 			 	         	 
 	        			 }if((relatedProductInclusion.equalsIgnoreCase("no")) || (relatedProductInclusion.equalsIgnoreCase(" "))){
-	        				
-	        				 if(record.getIsbn13()== null || record.getIsbn13() == ""){
-			            			failureResult.add("MISSING ISBN;");
-			            	 }else if(!record.getIsbn13().equalsIgnoreCase(expectedParentISBNValue)){
-			 	            		failureResult.add("INCORRECT PARENT ISBN;");
-			 	             }
-	        				
-	        				 if(record.getIsbn13()== null || record.getIsbn13() == ""){
-			            			failureResult.add("MISSING ISBN;");
-			            	 }else if(record.getIsbn13().equalsIgnoreCase(expectedRelatedProductISBNValue)){
-	 	 	            		failureResult.add("INCORRECT RELATED PRODUCT ISBN;");
-	 	 	            	}
+	        				 for (Record record:recordList){
+		        				 if(record.getIsbn13()== null || record.getIsbn13() == ""){
+				            			failureResult.add("MISSING ISBN;");
+				            	 }else if(!record.getIsbn13().equalsIgnoreCase(expectedParentISBNValue)){
+				 	            		failureResult.add("INCORRECT PARENT ISBN;");
+				 	             }
+		        				
+		        				 if(record.getIsbn13()== null || record.getIsbn13() == ""){
+				            			failureResult.add("MISSING ISBN;");
+				            	 }else if(record.getIsbn13().equalsIgnoreCase(expectedRelatedProductISBNValue)){
+		 	 	            		failureResult.add("INCORRECT RELATED PRODUCT ISBN;");
+		 	 	            	}
+	        				 }
 	        			 }
 	        			 
 	        			 
-	        		}
+	        		//}
 	        	}
 	        	
 	        }catch(Exception e) {

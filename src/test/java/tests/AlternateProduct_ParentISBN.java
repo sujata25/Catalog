@@ -30,8 +30,8 @@ public class AlternateProduct_ParentISBN {
 	public void init_vars(){
 		sheetName = "CUAlternateProduct";
 		startCol = 0;
-		totalCols = 16;
-		//endPoint = "Product";
+		totalCols = 8;
+		endPoint = "Parent";
 		//inputFilePath = System.getProperty("inputFilePath");
 		//startRow = Integer.parseInt(System.getProperty("startRow"));
 		//maxRows = Integer.parseInt(System.getProperty("maxRows"));
@@ -39,9 +39,9 @@ public class AlternateProduct_ParentISBN {
 		//inputFilePath="D:\\Project\\CU Catalog\\Files\\cu relationships extract with type fields and bundles_070318.xlsx";
 		startRow=2;
 		maxRows=8;
-		inputFilePath="D:\\Project\\CU Catalog\\Files\\cu relationships.xlsx";
+		inputFilePath="D:\\Project\\CU Catalog\\Files\\19_july_2018\\cucatalog.xlsx";
 		reportFilePath =  "D:\\test.xlsx";
-		reportSheetName = "CoursewareEBK_ParentISBN";
+		reportSheetName = "Alternate_ParentISBN";
 		UpdateExcelSheet.createFile(reportFilePath, reportSheetName);
 	}
 	
@@ -66,24 +66,26 @@ public class AlternateProduct_ParentISBN {
 			 list[i]=varArg[i].toString();
 		 }
 		  testCount++;
-		  boolean noresponseflag=false;
+		  boolean noresponseflag=false,listValueNotEmpty=false;
 	      HashSet<String> failureResponse = null;
 	      System.out.println("product Stating Test Number : " + testCount);
 	      try {
+	    	  if(!list[CURelationshipIndex.PARENT_ISBN.getIndex()].isEmpty()){
+		    	listValueNotEmpty=true; 
 	    	   JSONObject jsonObject = APIExecutor.executeProductAPI(list[CURelationshipIndex.PARENT_ISBN.getIndex()]);
 	    	   AlternateProductValidator Validator = new AlternateProductValidator(jsonObject);
 	    	   Validator.verifyRecordForQueriedParentISBN(list[CURelationshipIndex.PARENT_ISBN.getIndex()],list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()],list[CURelationshipIndex.PARENT_CU_INCLUSION.getIndex()],list[CURelationshipIndex. RELATED_PRODUCT_CU_INCLUSION.getIndex()]);
 	    	   failureResponse = Validator.failureResult();
 	           System.out.println("failure response is ====>" + failureResponse);
 	           Assert.assertTrue(failureResponse.isEmpty(),"For " + list[CURelationshipIndex.PARENT_ISBN.getIndex()] + " failure response is " + failureResponse);
+	    	  }
 	      }catch(Exception e){
 	    	 noresponseflag=true;
 	         Assert.assertFalse(failureResponse.isEmpty(),"For " + list[CURelationshipIndex.PARENT_ISBN.getIndex()] + " failure response is " + failureResponse);
 	      }finally{
-	    	if(noresponseflag){
-	    		System.out.println("insise noreso");
+	    	  if(noresponseflag && listValueNotEmpty){
 				UpdateExcelSheet.updateNoResponseInSheet(sheetName, endPoint, list[CURelationshipIndex.PARENT_ISBN.getIndex()],reportSheetName);
-	        }else{
+	    	}else if(!noresponseflag && listValueNotEmpty) {
 	        	if(failureResponse.isEmpty()){
 	    			UpdateExcelSheet.updatePassInSheet(sheetName, endPoint, list[CURelationshipIndex.PARENT_ISBN.getIndex()],reportSheetName);
 	    		}else{

@@ -27,10 +27,10 @@ public class CoursewareRental_RelatedProductISBN {
 	//Logger logger = LoggerImplemetation.logConfig("CoursewareEBK_RelatedProductISBN.class");
 	@BeforeClass
 	public void init_vars(){
-		sheetName = "CoursewaretoRental";
+		sheetName = "CoursewareToRental";
 		startCol = 0;
-		totalCols = 16;
-		//endPoint = "Product";
+		totalCols = 8;
+		endPoint = "Related Product";
 		//inputFilePath = System.getProperty("inputFilePath");
 		//startRow = Integer.parseInt(System.getProperty("startRow"));
 		//maxRows = Integer.parseInt(System.getProperty("maxRows"));
@@ -38,9 +38,9 @@ public class CoursewareRental_RelatedProductISBN {
 		//inputFilePath="D:\\Project\\CU Catalog\\Files\\cu relationships extract with type fields and bundles_070318.xlsx";
 		startRow=1;
 		maxRows=2;
-		inputFilePath="D:\\Project\\CU Catalog\\Files\\cu relationships.xlsx";
+		inputFilePath="D:\\Project\\CU Catalog\\Files\\19_july_2018\\cucatalog.xlsx";
 		reportFilePath =  "D:\\test.xlsx";
-		reportSheetName = "CoursewareRental_RelatedProductISBN";
+		reportSheetName = "Rental_RelatedProduct";
 		UpdateExcelSheet.createFile(reportFilePath, reportSheetName);
 	}
 	
@@ -50,7 +50,6 @@ public class CoursewareRental_RelatedProductISBN {
 		List<List<String>> testObjArray = excelUtils.getTableArray(startRow, maxRows);
 		Object [][] o=new Object[testObjArray.size()][];
 		for(int itr=0;itr<testObjArray.size();itr++){
-			System.out.println("testarray is====== " + testObjArray.get(itr));
 			List<String> list=testObjArray.get(itr);
 			o[itr]=new Object[1];
 			o[itr][0]=list.toArray();
@@ -66,30 +65,36 @@ public class CoursewareRental_RelatedProductISBN {
 			 list[i]=varArg[i].toString();
 		 }
 		  testCount++;
-		  boolean noresponseflag=false;
+		  boolean noresponseflag=false,listValueNotEmpty=false;
 	      HashSet<String> failureResponse = null;
 	      System.out.println("RELATED_PRODUCT_ISBN Stating Test Number : " + testCount);
 	      try {
-	    	  System.out.println("RELATED_PRODUCT_ISBN value======  " + list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()]);
-	    	   JSONObject jsonObject = APIExecutor.executeProductAPI(list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()]);
-	    	   //JSONObject jsonObject = APIExecutor.executeProductAPI(list[4]);
-
-	    	   RentalValidator Validator = new RentalValidator(jsonObject);
-	    	   Validator.verifyRecordForQueriedRelatedProductISBN(list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()],list[CURelationshipIndex.PARENT_ISBN.getIndex()],list[CURelationshipIndex.PARENT_CU_INCLUSION.getIndex()],list[CURelationshipIndex. RELATED_PRODUCT_CU_INCLUSION.getIndex()]);
-	    	   failureResponse = Validator.failureResult();
-	           System.out.println("failue response is ====>" + failureResponse);
-	           Assert.assertTrue(failureResponse.isEmpty(),"For " + list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()] + " failure response is " + failureResponse);
+	    	  if(!list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()].isEmpty()){
+				  listValueNotEmpty=true;
+		    	  JSONObject jsonObject = APIExecutor.executeProductAPI(list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()]);
+		    	   RentalValidator Validator = new RentalValidator(jsonObject);
+		    	   Validator.verifyRecordForQueriedRelatedProductISBN(list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()],list[CURelationshipIndex.PARENT_ISBN.getIndex()],list[CURelationshipIndex.PARENT_CU_INCLUSION.getIndex()],list[CURelationshipIndex. RELATED_PRODUCT_CU_INCLUSION.getIndex()]);
+		    	   failureResponse = Validator.failureResult();
+		           System.out.println("failue response is ====>" + failureResponse);
+		           Assert.assertTrue(failureResponse.isEmpty(),"For " + list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()] + " failure response is " + failureResponse);
+		      }
 	      }catch(Exception e){
+	    	  System.out.println("value of noresponse" + noresponseflag);
 	    	 noresponseflag=true;
-	         Assert.assertTrue(failureResponse.isEmpty(),"For " + list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()] + " failure response is " + failureResponse);
+	         //Assert.assertTrue(failureResponse.isEmpty(),"For " + list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()] + " failure response is " + failureResponse);
 	      }finally{
-	    	  if(failureResponse.toString().equalsIgnoreCase("SKIPPED")){
+	    	 /*if(failureResponse.toString().equalsIgnoreCase("SKIPPED")){
 	    		  noresponseflag=true;
-	    	  }
-	    	if(noresponseflag){
-				UpdateExcelSheet.updateNoResponseInSheet(sheetName, endPoint, list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()],reportSheetName);
-	        }else{
-	        	if(failureResponse.isEmpty()){
+	    	 }*/
+	    	  System.out.println("value of noresponse...2...." + noresponseflag);
+	    	  System.out.println("value of listValueNotEmpty" + listValueNotEmpty);
+
+	    	if(noresponseflag && listValueNotEmpty){
+		    	  System.out.println("if value of noresponse...2....");
+	    		UpdateExcelSheet.updateNoResponseInSheet(sheetName, endPoint, list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()],reportSheetName);
+	    	 }else if(!noresponseflag && listValueNotEmpty) {
+		    	  System.out.println("else value of noresponse...2....");
+	    		 if(failureResponse.isEmpty()){
 	    			UpdateExcelSheet.updatePassInSheet(sheetName, endPoint, list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()],reportSheetName);
 	    		}else{
 	    			UpdateExcelSheet.updateFailInSheet(sheetName, endPoint, list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()], failureResponse,reportSheetName);

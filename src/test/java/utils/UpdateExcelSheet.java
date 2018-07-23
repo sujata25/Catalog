@@ -121,7 +121,7 @@ public class UpdateExcelSheet {
     
     
     public static void updateFailInSheet(String sourceSheet, String endpoint, String ISBN, HashSet<String> errors, String reportSheet) {
-
+    	int rowCount = 0;
         String errorString = "";
         for(String error:errors){
             errorString += error + "; ";
@@ -132,11 +132,12 @@ public class UpdateExcelSheet {
             FileInputStream inputStream = new FileInputStream(new File(filePath));
             Workbook workbook = WorkbookFactory.create(inputStream);
             Sheet sheet = workbook.getSheet(reportSheet);
+            System.out.println("sheet name " + reportSheet);
             Object[][] bookData = {
                     {sourceSheet, endpoint, ISBN, "Fail", errorString },
             };
-            int rowCount = sheet.getLastRowNum();
 
+            rowCount = sheet.getLastRowNum();
             for (Object[] aBook : bookData) {
                 Row row = sheet.createRow(++rowCount);
                 int columnCount = 0;

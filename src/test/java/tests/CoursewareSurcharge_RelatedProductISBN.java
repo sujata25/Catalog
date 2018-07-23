@@ -3,6 +3,7 @@ package tests;
 import java.util.HashSet;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
@@ -12,6 +13,7 @@ import org.testng.annotations.Test;
 import utils.APIExecutor;
 import utils.CURelationshipIndex;
 import utils.ExcelUtils;
+import utils.LoggerImplemetation;
 import utils.UpdateExcelSheet;
 import validators.SurchageValidator;
 
@@ -24,14 +26,14 @@ public class CoursewareSurcharge_RelatedProductISBN
 	int startRow, startCol, totalCols, maxRows;
 	String reportFilePath;
 	String reportSheetName;
-	//Logger logger = LoggerImplemetation.logConfig("CoursewareEBK_RelatedProductISBN.class");
+	Logger logger = LoggerImplemetation.logConfig("CoursewareEBK_RelatedProductISBN.class");
 	@BeforeClass
 	public void init_vars()
 	{
-		sheetName = "CoursewaretoSurchargeISBN";
+		sheetName = "CoursewareToSurchaseISBN";
 		startCol = 0;
-		totalCols = 16;
-		//endPoint = "Product";
+		totalCols = 8;
+		endPoint = "Related Product";
 		//inputFilePath = System.getProperty("inputFilePath");
 		//startRow = Integer.parseInt(System.getProperty("startRow"));
 		//maxRows = Integer.parseInt(System.getProperty("maxRows"));
@@ -39,9 +41,9 @@ public class CoursewareSurcharge_RelatedProductISBN
 		//inputFilePath="D:\\Project\\CU Catalog\\Files\\cu relationships extract with type fields and bundles_070318.xlsx";
 		startRow=2;
 		maxRows=5;
-		inputFilePath="D:\\Project\\CU Catalog\\Files\\cu relationships.xlsx";
-		reportFilePath =  "/home/princegupta/Downloads/test.xlsx";
-		reportSheetName = "CoursewareEBK_RelatedProductISBN";
+		inputFilePath="D:\\Project\\CU Catalog\\Files\\19_july_2018\\cucatalog.xlsx";
+		reportFilePath = "D:\\test.xlsx";
+		reportSheetName = "Surchage_RelatedProduct";
 		UpdateExcelSheet.createFile(reportFilePath, reportSheetName);
 	}
 	
@@ -70,11 +72,13 @@ public class CoursewareSurcharge_RelatedProductISBN
 			 list[i]=varArg[i].toString();
 		 }
 		  testCount++;
-		  boolean noresponseflag=false;
+		  boolean noresponseflag=false,listValueNotEmpty=false;
 	      HashSet<String> failureResponse = null;
 	      System.out.println("product Stating Test Number : " + testCount);
 	      try 
 	      {
+	    	  if(!list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()].isEmpty()){
+			   listValueNotEmpty=true; 
 	    	   JSONObject jsonObject = APIExecutor.executeProductAPI(list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()]);
 	    	   System.out.println(jsonObject);
 	    	   SurchageValidator Validator = new SurchageValidator(jsonObject);
@@ -82,17 +86,15 @@ public class CoursewareSurcharge_RelatedProductISBN
 	    	   failureResponse = Validator.failureResult();
 	           System.out.println("failue response is ====>" + failureResponse);
 	           Assert.assertTrue(failureResponse.isEmpty(),"For " + list[CURelationshipIndex.PARENT_ISBN.getIndex()] + " failure response is " + failureResponse);
+	    	  }
 	      }catch(Exception e){
 	    	 noresponseflag=true;
-	         Assert.assertTrue(failureResponse.isEmpty(),"For " + list[CURelationshipIndex.PARENT_ISBN.getIndex()] + " failure response is " + failureResponse);
-	      }finally
-	      {
-	    	if(noresponseflag){
+	         //Assert.assertTrue(failureResponse.isEmpty(),"For " + list[CURelationshipIndex.PARENT_ISBN.getIndex()] + " failure response is " + failureResponse);
+	      }finally{
+	    	  if(noresponseflag && listValueNotEmpty){
 				UpdateExcelSheet.updateNoResponseInSheet(sheetName, endPoint, list[CURelationshipIndex.PARENT_ISBN.getIndex()],reportSheetName);
-	        }else
-	        {
-	        	if(failureResponse.isEmpty())
-	        	{
+	    	  }else if(!noresponseflag && listValueNotEmpty) {
+	        	if(failureResponse.isEmpty()){
 	    			UpdateExcelSheet.updatePassInSheet(sheetName, endPoint, list[CURelationshipIndex.PARENT_ISBN.getIndex()],reportSheetName);
 	    		}else{
 	    			UpdateExcelSheet.updateFailInSheet(sheetName, endPoint, list[CURelationshipIndex.PARENT_ISBN.getIndex()], failureResponse,reportSheetName);

@@ -20,21 +20,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class UpdateExcelSheet {
 
     public static String filePath = "";
-
-   /* public static void main(String[] args) {
-        HashSet<String> errs = new HashSet<>();
-        errs.add("Error 1");
-        errs.add("Error 2");
-        filePath = "D:\\test.xlsx";
-        String reportSheet = "Sheet one";
-        createFile(filePath, reportSheet);
-        updatePassInSheet("Courseware", "endpoint1", "123", reportSheet);
-        updatePassInSheet("Courseware", "endpoint2", "1234", reportSheet);
-        updatePassInSheet("Courseware", "endpoint3", "1235", reportSheet);
-        updateFailInSheet("Courseware", "endpoint4", "123566", errs, reportSheet);
-        updateFailInSheet("Courseware", "endpoint5", "123522266", errs, reportSheet);
-    }*/
-
     public static void createFile(String path, String sheetName){
         filePath = path;
         File f = new File(filePath);
@@ -71,17 +56,7 @@ public class UpdateExcelSheet {
                     {sourceSheet, endpoint, ISBN, "Pass" },
             };
 
-            try{
-            	//rowCount= getLastRow(sheet);
-                //System.out.println("rowCount is===="+ rowCount);
-            	
-            	rowCount = sheet.getLastRowNum();
-                 
-            }catch(Exception e){
-            	e.printStackTrace();
-            	System.out.println("exception ");
-            }
-
+            rowCount = sheet.getLastRowNum();
             for (Object[] aBook : bookData) {
                 Row row = sheet.createRow(++rowCount);
                 int columnCount = 0;
@@ -106,20 +81,6 @@ public class UpdateExcelSheet {
             ex.printStackTrace();
         }
     }
-
-    public static int getLastRow(Sheet sheet) {
-		int rowCount = 0;
-		Iterator<Row> iter = sheet.rowIterator();
-		System.out.println("iter");
-		while (iter.hasNext()) {
-			Row r = iter.next();
-			rowCount++;
-		}
-		System.out.println("getLastRow:::" + rowCount);
-		return rowCount;
-	}
-    
-    
     public static void updateFailInSheet(String sourceSheet, String endpoint, String ISBN, HashSet<String> errors, String reportSheet) {
     	int rowCount = 0;
         String errorString = "";
@@ -132,11 +93,9 @@ public class UpdateExcelSheet {
             FileInputStream inputStream = new FileInputStream(new File(filePath));
             Workbook workbook = WorkbookFactory.create(inputStream);
             Sheet sheet = workbook.getSheet(reportSheet);
-            System.out.println("sheet name " + reportSheet);
             Object[][] bookData = {
                     {sourceSheet, endpoint, ISBN, "Fail", errorString },
             };
-
             rowCount = sheet.getLastRowNum();
             for (Object[] aBook : bookData) {
                 Row row = sheet.createRow(++rowCount);

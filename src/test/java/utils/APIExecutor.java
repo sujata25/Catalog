@@ -8,8 +8,7 @@ public class APIExecutor {
     @SuppressWarnings("deprecation")
 	public static JSONObject executeProductAPI(String isbn)  throws Exception{
         String url = APIUrls.PRODUCT_URL + URLEncoder.encode(isbn);
-        System.out.println("executeProductAPI ISBN Value ========>" + isbn + " url is ===>" + url);
-        //System.out.println(HttpClientHelper.getJsonObjectFromAPI(url));
+        System.out.println("ISBN Value ==>" + isbn + " url is ==>" + url);
         return HttpClientHelper.getJsonObjectFromAPI(url);
    
     }

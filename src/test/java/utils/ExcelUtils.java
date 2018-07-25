@@ -44,10 +44,8 @@ public class ExcelUtils {
             int index=0,rowItr=0;
             dataList=new ArrayList<>(); 
   		   	 for(Row r:ExcelWSheet){ 
-  		   		// if(index>=1 && startRow>=r.getRowNum() && maxRows>0){  
   	  	           if(startRow<=r.getRowNum() && endRow>=r.getRowNum())
   	  	           { 
-	  		   		//if(index>=1 && maxRows>0){
 	  		       		List<String> data=new ArrayList<String>();
   		       			int lastCell=r.getLastCellNum();
 	  		       		int startCell=r.getFirstCellNum();
@@ -61,11 +59,9 @@ public class ExcelUtils {
 		  		       			}
 		  		       		 }
 		  		       		dataList.add(data);
-		  		       	//endRow--;
 		  		   	} else if(endRow<r.getRowNum()){
 						 break; 
 					}		   		
-	       	  // index++;
 	       	}       
         } 
         catch (FileNotFoundException e){
@@ -81,10 +77,10 @@ public class ExcelUtils {
     }
  
     
-		 public HashMap<String,List<String>> getCUMap(String relatedValue) throws Exception {
-		         List<String>  datafetch = null;
-		         HashMap<String,List<String>> dataList2 = new HashMap<String,List<String>>(); 
-				 try {
+	public HashMap<String,List<String>> getCUMap(String relatedValue) throws Exception {
+		   List<String>  datafetch = null;
+		   HashMap<String,List<String>> dataList2 = new HashMap<String,List<String>>(); 
+		   try {
 		            FileInputStream ExcelFile = new FileInputStream(path);
 		            Workbook  workbook = StreamingReader.builder().rowCacheSize(100).bufferSize(4096).open(ExcelFile); 
 		            ExcelWSheet = workbook.getSheet(sheetName);
@@ -103,22 +99,16 @@ public class ExcelUtils {
 		  		       			      
 							} 
 		  		   dataList2.put(relatedValue,datafetch);
-		  		   System.out.println("dataList2 ==========>" + dataList2);
-				}
-		        catch (FileNotFoundException e){
+			}
+		    catch (FileNotFoundException e){
 		            System.out.println("Could not read the Excel sheet");
 		            e.printStackTrace();
-		        }
-		        catch (IOException e){
+		    }
+		    catch (IOException e){
 		            System.out.println("Could not read the Excel sheet");
 		            e.printStackTrace();
-		        }
-				
-				return dataList2;
+		    }
+		    return dataList2;
 		   }
-    
-    
-    
-
-    
+     
 }

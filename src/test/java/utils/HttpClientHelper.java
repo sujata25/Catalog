@@ -1,29 +1,27 @@
 package utils;
 
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.testng.Assert;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 public class HttpClientHelper {
 
-   /* public static void main(String[] args) {
-        JSONObject jsonObject = getJsonObjectFromAPI("https://s-www.cengage.com/ws/endeca/cengage/products?dims=unlimited&expanded=true&q=9781337769754");
-        System.out.println(jsonObject.toJSONString());
-        JSONObject params = (JSONObject) jsonObject.get("params");
-        System.out.println(params.get("q").toString());
-    }*/
-
+   
     public static JSONObject getJsonObjectFromAPI(String url) throws Exception{
         HttpClient httpClient = HttpClientBuilder.create().build();
         HttpGet get = new HttpGet(url);
@@ -31,10 +29,22 @@ public class HttpClientHelper {
         ResponseHandler<String> handler = new BasicResponseHandler();
         JSONObject jsonObject = new JSONObject();
         //try {
+        	String json = null;
              response = httpClient.execute(get);
-            String json = handler.handleResponse(response);
+             if(response.getStatusLine().getStatusCode()>300){
+            	json= EntityUtils.toString(response.getEntity());
+             }
+             else{
+               try{
+               json = handler.handleResponse(response);
+               }catch(Exception e){
+             	System.out.println("json parse error ");
+             	e.printStackTrace();
+             }
+             }
             JSONParser parser = new JSONParser();
             jsonObject = (JSONObject) parser.parse(json);
+            System.out.println("json object "+  jsonObject);
         /*} catch (ParseException e) {
             e.printStackTrace();
         } catch (ClientProtocolException e) {

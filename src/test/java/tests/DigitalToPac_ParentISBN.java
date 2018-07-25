@@ -31,13 +31,8 @@ public class DigitalToPac_ParentISBN {
 		startCol = 0;
 		totalCols = 8;
 		endPoint = "Parent";
-		//inputFilePath = System.getProperty("inputFilePath");
-		//startRow = Integer.parseInt(System.getProperty("startRow"));
-		//maxRows = Integer.parseInt(System.getProperty("maxRows"));
-		//reportFilePath = System.getProperty("reportFilePath");
-		//inputFilePath="D:\\Project\\CU Catalog\\Files\\cu relationships extract with type fields and bundles_070318.xlsx";
-		startRow=2;
-		maxRows=8;
+		startRow=1;
+		maxRows=3;
 		inputFilePath="D:\\Project\\CU Catalog\\Files\\19_july_2018\\cucatalog.xlsx";
 		reportFilePath =  "D:\\test.xlsx";
 		reportSheetName = "DigitalPAC_ParentISBN";

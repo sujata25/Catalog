@@ -50,7 +50,8 @@ public class SurchageValidator
 	        	
 	        	if((parentInclusion.equalsIgnoreCase("no") && relatedProductInclusion.equalsIgnoreCase("")) ||
 	    	        (parentInclusion.equalsIgnoreCase("no") && relatedProductInclusion.equalsIgnoreCase("no"))){
-	                if(surchase.getTotalRecords() != 0){
+	                System.out.println(surchase.getTotalRecords());
+	        		if(surchase.getTotalRecords() != 0){
 	    	        		failureResult.add("TOTAL RECORDS NOT 0;");
 	    	        }if (!recordList.isEmpty()) {
 	    	        		failureResult.add("RECORDLIST NOT EMPTY;");
@@ -60,21 +61,28 @@ public class SurchageValidator
 	        	
 	        	if(parentInclusion.equalsIgnoreCase("yes")){
 	        		boolean parentFlag=false,relatedFlag=false;
-	        		 for (Record record:recordList){
-	        			 System.out.println("getIsbn13 is=======>" + record.getIsbn13());
 	        			 if((relatedProductInclusion.equalsIgnoreCase("no")) || (relatedProductInclusion.equalsIgnoreCase(""))){
-	        				 if(record.getIsbn13()== null || record.getIsbn13().equals("")){
-			            			failureResult.add("MISSING ISBN;");
-			            	 }else if(!record.getIsbn13().equals(expectedParentISBNValue)) {
-	        					 failureResult.add("INCORRECT PARENT ISBN");
-	        				 }
-	        				 if(record.getIsbn13()== null || record.getIsbn13().equals("")){
-			            			failureResult.add("MISSING ISBN;");
-			            	 }else if(record.getIsbn13().equals(expectedRelatedProductISBNValue)) {
-	        					 failureResult.add("INCORRECT RELATED PRODUCT ISBN");
-	        				 }
+	    	        		 for (Record record:recordList){
+		        				 System.out.println(record.getIsbn13());
+	    	        			 if(record.getIsbn13()== null || record.getIsbn13().equals("")){
+				            			failureResult.add("MISSING ISBN;");
+				            	 }else if(record.getIsbn13().equals(expectedParentISBNValue)) {
+				            		 parentFlag=true;
+		        				 }
+		        				 if(record.getIsbn13()== null || record.getIsbn13().equals("")){
+				            			failureResult.add("MISSING ISBN;");
+				            	 }else if(record.getIsbn13().equals(expectedRelatedProductISBNValue)) {
+		        					 relatedFlag=true;
+		        				 }
+	    	        		 }
+	    	        		 if(!parentFlag && relatedFlag){
+				 	            	failureResult.add("INCORRECT ISBN;");
+				 	         }else  if(!parentFlag && !relatedFlag){
+				 	            	failureResult.add("INCORRECT ISBN;");
+				 	         }
+	    	        		 
 	        			 }
-	        		}
+	        		
 	        	}
 	        	
 	        }catch(Exception e) {
@@ -103,23 +111,20 @@ public class SurchageValidator
 	        	
 	        	if(relatedProductInclusion.equalsIgnoreCase("no")){
 	        		boolean parentFlag=false,relatedFlag=false;
-	        		 if(surchase.getTotalRecords() == null) {
-    					 failureResult.add(" Total Record does not exist");
-    				 }else if(surchase.getTotalRecords() != 1) {
-    					 failureResult.add("Total record mismatch");
-    				 }
-	        		 for (Record record:recordList){
-	        			 System.out.println("getIsbn13 is=======>" + record.getIsbn13());
-	        			 if((parentInclusion.equalsIgnoreCase("yes")) || (parentInclusion.equalsIgnoreCase("no"))){
-	        				 if(record.getIsbn13()== null || record.getIsbn13().equals("")){
-			            			failureResult.add("MISSING ISBN;");
-			            	 }else if(record.getIsbn13().contains(expectedRelatedProductISBNValue)) {
-	        					 failureResult.add("PRODUCT ISBN EXIST IN THE RECORD");
-	        				 }
-	        				 
-	        				
-	        			}
-	        		}
+       			 	if((parentInclusion.equalsIgnoreCase("yes")) || (parentInclusion.equalsIgnoreCase("no"))){
+       			 		 if(surchase.getTotalRecords() != 1) {
+		   					 failureResult.add("TOTAL RECORDS MISMATCH;");
+		   				 }
+		        		 for (Record record:recordList){
+		        			 System.out.println("getIsbn13 is=======>" + record.getIsbn13());
+		        				 if(record.getIsbn13()== null || record.getIsbn13().equals("")){
+				            			failureResult.add("MISSING ISBN;");
+				            	 }else if(record.getIsbn13().contains(expectedRelatedProductISBNValue)) {
+		        					 failureResult.add("PRODUCT ISBN EXIST IN THE RECORD");
+		        				 }
+		        		}
+       			 	} 
+	        		
 	        	}
 	        	
 	        }catch(Exception e) {

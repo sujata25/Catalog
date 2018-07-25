@@ -55,10 +55,11 @@ public class RentalValidator {
 	        	System.out.println("expectedRelatedProductISBNValue is=========="+ expectedRelatedProductISBNValue);
 	        	System.out.println("parentInclusion is=========="+ parentInclusion);
 	        	System.out.println("relatedProductInclusion is==========="+ relatedProductInclusion);
-	        	
+	        	boolean parentFlag=false, relatedFlag=false;
 	        	if((parentInclusion.equalsIgnoreCase("no") && relatedProductInclusion.equalsIgnoreCase("")) ||
 	    	        (parentInclusion.equalsIgnoreCase("no") && relatedProductInclusion.equalsIgnoreCase("no"))){
-	                if(rental.getTotalRecords() != 0){
+	                System.out.println(rental.getTotalRecords());
+	        		if(rental.getTotalRecords() != 0){
 	    	        		failureResult.add("TOTAL RECORDS NOT 0;");
 	    	        }if (!recordList.isEmpty()) {
 	    	        		failureResult.add("RECORDLIST NOT EMPTY;");
@@ -66,23 +67,31 @@ public class RentalValidator {
 	    	     }
 	        	
 	        	if(parentInclusion.equalsIgnoreCase("yes")){
-	        		for (Record record:recordList){
-       			
-	        			if((relatedProductInclusion.equalsIgnoreCase("")) || (relatedProductInclusion.equalsIgnoreCase("no"))){
-	        				if(record.getIsbn13()== null || record.getIsbn13() == ""){
+	        		if((relatedProductInclusion.equalsIgnoreCase("")) || (relatedProductInclusion.equalsIgnoreCase("no"))){
+	        			   for (Record record:recordList){
+	        				    System.out.println(record.getIsbn13());
+	        	       			if(record.getIsbn13()== null || record.getIsbn13() == ""){
+				            			failureResult.add("MISSING ISBN;");
+				            	 }else if(record.getIsbn13().equalsIgnoreCase(expectedParentISBNValue)){
+				            		 parentFlag=true;
+				 	             }
+		        				if(record.getIsbn13()== null || record.getIsbn13() == ""){
 			            			failureResult.add("MISSING ISBN;");
-			            	 }else if(!record.getIsbn13().equalsIgnoreCase(expectedParentISBNValue)){
-			 	            		failureResult.add("INCORRECT PARENT ISBN;");
-			 	             }
-	        				if(record.getIsbn13()== null || record.getIsbn13() == ""){
-		            			failureResult.add("MISSING ISBN;");
-	        				}else if(record.getIsbn13().equalsIgnoreCase(expectedRelatedProductISBNValue)){
-		 	            		failureResult.add("INCORRECT RELATED PRODUCT ISBN;");
-		 	            	}	
-       			
+		        				}else if(record.getIsbn13().equalsIgnoreCase(expectedRelatedProductISBNValue)){
+		        					relatedFlag=true;
+			 	            	}	
+	       			
+	        				}
+	        				if(!parentFlag && relatedFlag){
+				 	            	failureResult.add("INCORRECT ISBN;");
+				 	        }else  if(!parentFlag && !relatedFlag){
+				 	            	failureResult.add("INCORRECT ISBN;");
+				 	        }
 	        			}
+	        			
+	        			
        			 }
-	        	}
+	        	
 	        }catch(Exception e) {
 	            e.printStackTrace();
 	        }
@@ -92,6 +101,7 @@ public class RentalValidator {
 	  public void verifyRecordForQueriedRelatedProductISBN(String expectedParentISBNValue,String expectedRelatedProductISBNValue, String parentInclusion, String relatedProductInclusion) {
 		  try{
 	        	List<Record> recordList = rental.getRecords();
+        		boolean parentFlag=false,relatedFlag=false;
 	        	System.out.println("expectedParentISBNValue is==========="+ expectedParentISBNValue);
 	        	System.out.println("expectedRelatedProductISBNValue is=========="+ expectedRelatedProductISBNValue);
 	        	System.out.println("parentInclusion is=========="+ parentInclusion);
@@ -105,26 +115,24 @@ public class RentalValidator {
 		    	        		failureResult.add("RECORDLIST NOT EMPTY;");
 						}
 		    	       
-		    	     }
+		    	}
 		        	
-		        	if(relatedProductInclusion.equalsIgnoreCase("no")){
-		        		boolean parentFlag=false,relatedFlag=false;
-		        		if(rental.getTotalRecords()==null || rental.getTotalRecords().equals("")) {
-       					 failureResult.add(" Total Record does not exist");
-	       				 }else if(!rental.getTotalRecords().equals(1)) {
-	       					 failureResult.add("Total record missmatch");
-	       				 }
-		        		 for (Record record:recordList){
-		        			 System.out.println("getIsbn13 is=======>" + record.getIsbn13());
-		        			 if((parentInclusion.equalsIgnoreCase("yes")) || (parentInclusion.equalsIgnoreCase("no")) ){
-		        				 if(record.getIsbn13()== null || record.getIsbn13().equals("")){
-				            			failureResult.add("MISSING ISBN;");
-				            	 }else if(!record.getIsbn13().equals(expectedRelatedProductISBNValue)) {
-		        					 failureResult.add("PRODUCT ISBN EXIST IN THE RECORD");
-		        				 }
-		        			 }
-		        		}
-		        	}
+		        if(relatedProductInclusion.equalsIgnoreCase("no")){
+	        			 if((parentInclusion.equalsIgnoreCase("yes")) || (parentInclusion.equalsIgnoreCase("no")) ){
+	        				 	 System.out.println(rental.getTotalRecords());
+	        				 	 if(rental.getTotalRecords() != 1) {
+	    	       					 failureResult.add("TOTAL RECORDS MISMATCH;");
+	    	       				 }
+	    		        		 for (Record record:recordList){
+	    		        			 System.out.println("getIsbn13 is=======>" + record.getIsbn13());
+	    		        				 if(record.getIsbn13()== null || record.getIsbn13().equals("")){
+	    				            			failureResult.add("MISSING ISBN;");
+	    				            	 }else if(record.getIsbn13().equals(expectedRelatedProductISBNValue)) {
+	    		        					 failureResult.add("PRODUCT ISBN EXIST IN THE RECORD");
+	    		        				 }
+	    		        		}
+	        			 }
+		        }
 	        	
 	        }catch(Exception e) {
 	            e.printStackTrace();

@@ -13,9 +13,9 @@ import utils.APIExecutor;
 import utils.CURelationshipIndex;
 import utils.ExcelUtils;
 import utils.UpdateExcelSheet;
-import validators.AlternateProductValidator;
+import validators.AlternateValidator;
 import validators.LLFValidator;
-import validators.RecommendedProductValidator;
+import validators.RecommendedValidator;
 import validators.RentalValidator;
 
 public class RecommendedProduct_RelatedProductISBN {
@@ -33,13 +33,8 @@ public class RecommendedProduct_RelatedProductISBN {
 		startCol = 0;
 		totalCols = 8;
 		endPoint = "Related Product";
-		//inputFilePath = System.getProperty("inputFilePath");
-		//startRow = Integer.parseInt(System.getProperty("startRow"));
-		//maxRows = Integer.parseInt(System.getProperty("maxRows"));
-		//reportFilePath = System.getProperty("reportFilePath");
-		//inputFilePath="D:\\Project\\CU Catalog\\Files\\cu relationships extract with type fields and bundles_070318.xlsx";
-		startRow=2;
-		maxRows=8;
+		startRow=91;
+		maxRows=92;
 		inputFilePath="D:\\Project\\CU Catalog\\Files\\19_july_2018\\cucatalog.xlsx";
 		reportFilePath =  "D:\\test.xlsx";
 		reportSheetName = "Recommended_RelatedProduct";
@@ -74,7 +69,7 @@ public class RecommendedProduct_RelatedProductISBN {
 	    	  if(!list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()].isEmpty()){
 	    	   listValueNotEmpty=true; 
 	    	   JSONObject jsonObject = APIExecutor.executeProductAPI(list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()]);
-	    	   RecommendedProductValidator Validator = new RecommendedProductValidator(jsonObject);
+	    	   RecommendedValidator Validator = new RecommendedValidator(jsonObject);
 	    	   Validator.verifyRecordForQueriedRelatedProductISBN(list[CURelationshipIndex.PARENT_ISBN.getIndex()],list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()],list[CURelationshipIndex.PARENT_CU_INCLUSION.getIndex()],list[CURelationshipIndex. RELATED_PRODUCT_CU_INCLUSION.getIndex()]);
 	    	   failureResponse = Validator.failureResult();
 	           System.out.println("failue response is ====>" + failureResponse);

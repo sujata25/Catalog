@@ -31,13 +31,8 @@ public class CoursewareRental_RelatedProductISBN {
 		startCol = 0;
 		totalCols = 8;
 		endPoint = "Related Product";
-		//inputFilePath = System.getProperty("inputFilePath");
-		//startRow = Integer.parseInt(System.getProperty("startRow"));
-		//maxRows = Integer.parseInt(System.getProperty("maxRows"));
-		//reportFilePath = System.getProperty("reportFilePath");
-		//inputFilePath="D:\\Project\\CU Catalog\\Files\\cu relationships extract with type fields and bundles_070318.xlsx";
 		startRow=1;
-		maxRows=2;
+		maxRows=3;
 		inputFilePath="D:\\Project\\CU Catalog\\Files\\19_july_2018\\cucatalog.xlsx";
 		reportFilePath =  "D:\\test.xlsx";
 		reportSheetName = "Rental_RelatedProduct";
@@ -75,24 +70,19 @@ public class CoursewareRental_RelatedProductISBN {
 		    	   RentalValidator Validator = new RentalValidator(jsonObject);
 		    	   Validator.verifyRecordForQueriedRelatedProductISBN(list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()],list[CURelationshipIndex.PARENT_ISBN.getIndex()],list[CURelationshipIndex.PARENT_CU_INCLUSION.getIndex()],list[CURelationshipIndex. RELATED_PRODUCT_CU_INCLUSION.getIndex()]);
 		    	   failureResponse = Validator.failureResult();
-		           System.out.println("failue response is ====>" + failureResponse);
+		           System.out.println("failure response is ====>" + failureResponse);
 		           Assert.assertTrue(failureResponse.isEmpty(),"For " + list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()] + " failure response is " + failureResponse);
 		      }
 	      }catch(Exception e){
-	    	  System.out.println("value of noresponse" + noresponseflag);
 	    	 noresponseflag=true;
-	         //Assert.assertTrue(failureResponse.isEmpty(),"For " + list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()] + " failure response is " + failureResponse);
 	      }finally{
 	    	 /*if(failureResponse.toString().equalsIgnoreCase("SKIPPED")){
 	    		  noresponseflag=true;
 	    	 }*/
-	    	  System.out.println("value of noresponse...2...." + noresponseflag);
-	    	  System.out.println("value of listValueNotEmpty" + listValueNotEmpty);
-
-	    	if(noresponseflag && listValueNotEmpty){
+	    	  if(noresponseflag && listValueNotEmpty){
 		    	  System.out.println("if value of noresponse...2....");
 	    		UpdateExcelSheet.updateNoResponseInSheet(sheetName, endPoint, list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()],reportSheetName);
-	    	 }else if(!noresponseflag && listValueNotEmpty) {
+	    	  }else if(!noresponseflag && listValueNotEmpty) {
 		    	  System.out.println("else value of noresponse...2....");
 	    		 if(failureResponse.isEmpty()){
 	    			UpdateExcelSheet.updatePassInSheet(sheetName, endPoint, list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()],reportSheetName);

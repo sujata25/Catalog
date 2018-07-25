@@ -13,7 +13,7 @@ import utils.APIExecutor;
 import utils.CURelationshipIndex;
 import utils.ExcelUtils;
 import utils.UpdateExcelSheet;
-import validators.AlternateProductValidator;
+import validators.AlternateValidator;
 import validators.EbookValidator;
 
 public class AlternateProduct_RelatedProductISBN {
@@ -29,16 +29,11 @@ public class AlternateProduct_RelatedProductISBN {
 	public void init_vars(){
 		sheetName = "CUAlternateProduct";
 		startCol = 0;
-		totalCols = 16;
+		totalCols = 8;
 		endPoint = "Related Product";
-		//inputFilePath = System.getProperty("inputFilePath");
-		//startRow = Integer.parseInt(System.getProperty("startRow"));
-		//maxRows = Integer.parseInt(System.getProperty("maxRows"));
-		//reportFilePath = System.getProperty("reportFilePath");
-		//inputFilePath="D:\\Project\\CU Catalog\\Files\\cu relationships extract with type fields and bundles_070318.xlsx";
-		startRow=2;
-		maxRows=6;
-		inputFilePath="D:\\Project\\CU Catalog\\Files\\cu relationships.xlsx";
+		startRow=745;
+		maxRows=747;
+		inputFilePath="D:\\Project\\CU Catalog\\Files\\19_july_2018\\cucatalog.xlsx";
 		reportFilePath =  "D:\\test.xlsx";
 		reportSheetName = "Alternate_RelatedProduct";
 		UpdateExcelSheet.createFile(reportFilePath, reportSheetName);
@@ -72,10 +67,10 @@ public class AlternateProduct_RelatedProductISBN {
 	    	  if(!list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()].isEmpty()){
 			   listValueNotEmpty=true; 
 	    	   JSONObject jsonObject = APIExecutor.executeProductAPI(list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()]);
-	    	   AlternateProductValidator Validator = new AlternateProductValidator(jsonObject);
-	    	   Validator.verifyRecordForQueriedRelatedProductISBN(list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()],list[CURelationshipIndex.PARENT_ISBN.getIndex()],list[CURelationshipIndex.PARENT_CU_INCLUSION.getIndex()],list[CURelationshipIndex. RELATED_PRODUCT_CU_INCLUSION.getIndex()]);
+	    	   AlternateValidator Validator = new AlternateValidator(jsonObject);
+	    	   Validator.verifyRecordForQueriedRelatedProductISBN(list[CURelationshipIndex.PARENT_ISBN.getIndex()],list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()],list[CURelationshipIndex.PARENT_CU_INCLUSION.getIndex()],list[CURelationshipIndex. RELATED_PRODUCT_CU_INCLUSION.getIndex()]);
 	    	   failureResponse = Validator.failureResult();
-	           System.out.println("failue response is ====>" + failureResponse);
+	           System.out.println("failure response is ====>" + failureResponse);
 	           Assert.assertTrue(failureResponse.isEmpty(),"For " + list[CURelationshipIndex.RELATED_PRODUCT_ISBN.getIndex()] + " failure response is " + failureResponse);
 	    	  }
 	      }catch(Exception e){

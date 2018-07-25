@@ -33,15 +33,8 @@ public class CoursewareEBK_ParentISBN {
 		startCol = 0;
 		totalCols = 8;
 		endPoint = "Parent";
-		//inputFilePath = System.getProperty("inputFilePath"); 	
-		//startRow = Integer.parseInt(System.getProperty("startRow"));
-		//maxRows = Integer.parseInt(System.getProperty("maxRows"));
-		//reportFilePath = System.getProperty("reportFilePath");
-		//inputFilePath="D:\\Project\\CU Catalog\\Files\\cu relationships extract with type fields and bundles_070318.xlsx";
-		/*startRow=5;
-		maxRows=1500;*/
-		startRow=1500;
-		maxRows=2966;
+		startRow=13;
+		maxRows=14;
 		inputFilePath="D:\\Project\\CU Catalog\\Files\\19_july_2018\\cucatalog.xlsx";
 		reportFilePath =  "D:\\test.xlsx";
 		reportSheetName = "EBK_ParentISBN";
@@ -52,7 +45,6 @@ public class CoursewareEBK_ParentISBN {
 	public Object[][] Authentication() throws Exception{
 		ExcelUtils excelUtils = new ExcelUtils(inputFilePath, sheetName);
 		List<List<String>> testObjArray = excelUtils.getTableArray(startRow, maxRows);
-		System.out.println("testObjArray is=========>" +  testObjArray);
 		Object [][] o=new Object[testObjArray.size()][];
 		for(int itr=0;itr<testObjArray.size();itr++){
 			List<String> list=testObjArray.get(itr);

@@ -28,20 +28,15 @@ public class CoursewareSurcharge_ParentISBN
 	@BeforeClass
 	public void init_vars()
 	{
-		sheetName = "CoursewareToSurchargeISBN";
+		sheetName = "CoursewareToSurchaseISBN";
 		startCol = 0;
 		totalCols = 8;
 		endPoint = "Parent";
-		//inputFilePath = System.getProperty("inputFilePath");
-		//startRow = Integer.parseInt(System.getProperty("startRow"));
-		//maxRows = Integer.parseInt(System.getProperty("maxRows"));
-		//reportFilePath = System.getProperty("reportFilePath");
-		//inputFilePath="D:\\Project\\CU Catalog\\Files\\cu relationships extract with type fields and bundles_070318.xlsx";
-		startRow=2;
-		maxRows=5;
+		startRow=106;
+		maxRows=107;
 		inputFilePath="D:\\Project\\CU Catalog\\Files\\19_july_2018\\cucatalog.xlsx";
 		reportFilePath =  "D:\\test.xlsx";
-		reportSheetName = "Surchage_RelatedProduct";
+		reportSheetName = "Surchage_ParentISBN";
 		UpdateExcelSheet.createFile(reportFilePath, reportSheetName);
 	}
 	

@@ -32,13 +32,8 @@ public class CoursewareRental_ParentISBN {
 		startCol = 0;
 		totalCols = 8;
 		endPoint = "Parent";
-		//inputFilePath = System.getProperty("inputFilePath");
-		//startRow = Integer.parseInt(System.getProperty("startRow"));
-		//maxRows = Integer.parseInt(System.getProperty("maxRows"));
-		//reportFilePath = System.getProperty("reportFilePath");
-		//inputFilePath="D:\\Project\\CU Catalog\\Files\\cu relationships extract with type fields and bundles_070318.xlsx";
 		startRow=2;
-		maxRows=8;
+		maxRows=3;
 		inputFilePath="D:\\Project\\CU Catalog\\Files\\19_july_2018\\cucatalog.xlsx";
 		reportFilePath =  "D:\\test.xlsx";
 		reportSheetName = "Rental_ParentISBN";
@@ -81,7 +76,6 @@ public class CoursewareRental_ParentISBN {
 	    	  }
 	      }catch(Exception e){
 	    	 noresponseflag=true;
-	         //Assert.assertTrue(failureResponse.isEmpty(),"For " + list[CURelationshipIndex.PARENT_ISBN.getIndex()] + " failure response is " + failureResponse);
 	      }finally{
 	    	 if(noresponseflag && listValueNotEmpty){
 				UpdateExcelSheet.updateNoResponseInSheet(sheetName, endPoint, list[CURelationshipIndex.PARENT_ISBN.getIndex()],reportSheetName);

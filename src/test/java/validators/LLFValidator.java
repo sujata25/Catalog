@@ -42,9 +42,11 @@ public class LLFValidator {
 	        	System.out.println("parentInclusion is=========="+ parentInclusion);
 	        	System.out.println("relatedProductInclusion is==========="+ relatedProductInclusion);
 	        	
+	        	boolean parentFlag=false, relatedFlag=false;
 	        	if((parentInclusion.equalsIgnoreCase("no") && relatedProductInclusion.equalsIgnoreCase("")) ||
 	    	        (parentInclusion.equalsIgnoreCase("no") && relatedProductInclusion.equalsIgnoreCase("no"))){
-	                if(llf.getTotalRecords() != 0){
+	                System.out.println("llf total recorDS :" + llf.getTotalRecords());
+	        		if(llf.getTotalRecords() != 0){
 	    	        		failureResult.add("TOTAL RECORDS NOT 0;");
 	    	        }if (!recordList.isEmpty()) {
 	    	        		failureResult.add("RECORDLIST NOT EMPTY;");
@@ -52,20 +54,26 @@ public class LLFValidator {
 	    	     }
 	        	
 	        	if(parentInclusion.equalsIgnoreCase("yes")){
-	        		 for (Record record:recordList){
-	        			 if((relatedProductInclusion.equalsIgnoreCase("")) || 
+	        		 	 if((relatedProductInclusion.equalsIgnoreCase("")) || 
 	        					 (relatedProductInclusion.equalsIgnoreCase("no"))){
-	        				 if(record.getIsbn13()== null || record.getIsbn13() == ""){
-			            			failureResult.add("MISSING ISBN;");
-			            	 }else if(!record.getIsbn13().equalsIgnoreCase(expectedParentISBNValue)){
-			 	            		failureResult.add("INCORRECT PARENT ISBN;");
-			 	             }
-	        				 if(record.getIsbn13()== null || record.getIsbn13() == ""){
-			            			failureResult.add("MISSING ISBN;");
-			            	 }else if(record.getIsbn13().equalsIgnoreCase(expectedRelatedProductISBNValue)){
-	 	 	            		failureResult.add("INCORRECT RELATED PRODUCT ISBN;");
-	 	 	            	}
-	        			 }
+	        				 for (Record record:recordList){
+	        					 if(record.getIsbn13()== null || record.getIsbn13() == ""){
+				            			failureResult.add("MISSING ISBN;");
+				            	 }else if(record.getIsbn13().equalsIgnoreCase(expectedParentISBNValue)){
+				 	            	parentFlag=true;
+				 	             }
+		        				 if(record.getIsbn13()== null || record.getIsbn13() == ""){
+				            			failureResult.add("MISSING ISBN;");
+				            	 }else if(record.getIsbn13().equalsIgnoreCase(expectedRelatedProductISBNValue)){
+		 	 	            		relatedFlag=true;
+		 	 	            	 }
+		        			 }
+	        				 System.out.println("parent flag===> " + parentFlag + " relatedFlag is====> " + relatedFlag);
+	        				 if(!parentFlag && relatedFlag){
+				 	            	failureResult.add("INCORRECT ISBN;");
+				 	         }else  if(!parentFlag && !relatedFlag){
+				 	            	failureResult.add("INCORRECT ISBN;");
+				 	         }
 	        		}
 	        	}
 	        	
@@ -84,7 +92,8 @@ public class LLFValidator {
 	        	
 	        	if((parentInclusion.equalsIgnoreCase("yes") && relatedProductInclusion.equalsIgnoreCase("")) ||
 	    	        (parentInclusion.equalsIgnoreCase("no") && relatedProductInclusion.equalsIgnoreCase(""))){
-	                if(llf.getTotalRecords() != 0){
+	                System.out.println(llf.getTotalRecords());
+	        		if(llf.getTotalRecords() != 0){
 	    	        		failureResult.add("TOTAL RECORDS NOT 0;");
 	    	        }if (!recordList.isEmpty()) {
 	    	        		failureResult.add("RECORDLIST NOT EMPTY;");
@@ -94,20 +103,21 @@ public class LLFValidator {
 	        	
 	        	if(relatedProductInclusion.equalsIgnoreCase("no")){
 	        		boolean parentFlag=false,relatedFlag=false;
-	        		if(llf.getTotalRecords() != 1) {
-   					 failureResult.add("TOTAL RECORD MISMATCH");
-   				 	}
-	        		 for (Record record:recordList){
-	        			 System.out.println("getIsbn13 is=======>" + record.getIsbn13());
-	        			 if((parentInclusion.equalsIgnoreCase("yes")) || (parentInclusion.equalsIgnoreCase("no"))){
-	        				 if(record.getIsbn13()== null || record.getIsbn13().equals("")){
-			            			failureResult.add("MISSING ISBN;");
-			            	 }else if(!record.getIsbn13().equals(expectedRelatedProductISBNValue)) {
-	        					 failureResult.add("INCORRECT RELATED PRODUCT ISBN");
-	        				 }
-	        				 
-	        			}
-	        		}
+	       			 if((parentInclusion.equalsIgnoreCase("yes")) || (parentInclusion.equalsIgnoreCase("no"))){
+	       				 System.out.println(llf.getTotalRecords());
+	       				 if(llf.getTotalRecords() != 1) {
+	      					 failureResult.add("TOTAL RECORD MISMATCH;");
+	      				 	}
+	   	        		 for (Record record:recordList){
+	   	        			 System.out.println("getIsbn13 is=======>" + record.getIsbn13());
+	   	        				 if(record.getIsbn13()== null || record.getIsbn13().equals("")){
+	   			            			failureResult.add("MISSING ISBN;");
+	   			            	 }else if(record.getIsbn13().equals(expectedRelatedProductISBNValue)) {
+	   	        					 failureResult.add("INCORRECT RELATED PRODUCT ISBN;");
+	   	        				 }
+	   	        		}
+	       			 }
+	        		
 	        	}
 	        	
 	        }catch(Exception e) {

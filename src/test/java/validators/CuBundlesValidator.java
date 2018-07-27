@@ -55,7 +55,7 @@ public class CuBundlesValidator {
 	        		 for(Record record:recordList){
 	        			 if(record.getIsbn13()== null || record.getIsbn13() == ""){
 		            			failureResult.add("MISSING ISBN;");
-		            	 }else if(record.getIsbn13().equalsIgnoreCase(expectedParentISBNValue)){
+		            	 }else if(record.getIsbn13().contains(expectedParentISBNValue)){
 		 	            		failureResult.add("INCORRECT ISBN;");
 		 	             }
 	 	             }
@@ -99,14 +99,7 @@ public class CuBundlesValidator {
 	 	            	}
 	 	            }
 		 	     }
-	        	 
-	        	 
-	        	 
-	        	
-
-	        	
-	        	
-	        }catch(Exception e) {
+	        	        }catch(Exception e) {
 	        	System.out.println("verify record ");
 	            e.printStackTrace();
 	        }

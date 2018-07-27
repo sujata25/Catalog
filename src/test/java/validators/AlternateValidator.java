@@ -73,7 +73,7 @@ public class AlternateValidator {
 	        				 System.out.println("parent flag===> " + parentFlag + " relatedFlag is====> " + relatedFlag);
 	        				 if(!parentFlag && relatedFlag){
 				 	            	failureResult.add("INCORRECT ISBN;");
-				 	         }else  if(!parentFlag && !relatedFlag){
+				 	         }else if(!parentFlag && !relatedFlag){
 				 	            	failureResult.add("INCORRECT ISBN;");
 				 	         }
 	        				 

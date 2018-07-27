@@ -33,8 +33,8 @@ public class CuBundles_RelatedProductISBN {
 		startCol = 0;
 		totalCols = 8;
 		endPoint = "Related Product";
-		startRow=2;
-		maxRows=4;
+		startRow=1700;
+		maxRows=2000;
 		inputFilePath="D:\\Project\\CU Catalog\\Files\\19_july_2018\\cucatalog.xlsx";
 		reportFilePath =  "D:\\test.xlsx";
 		reportSheetName = "Bundles_RelatedProduct";

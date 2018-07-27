@@ -31,20 +31,18 @@ public class HttpClientHelper {
         //try {
         	String json = null;
              response = httpClient.execute(get);
+             System.out.println("status code is==>" + response.getStatusLine().getStatusCode());
              if(response.getStatusLine().getStatusCode()>300){
-            	json= EntityUtils.toString(response.getEntity());
+                 System.out.println("if  code is==>" + response.getStatusLine().getStatusCode());
+            	 json= EntityUtils.toString(response.getEntity());
              }
              else{
-               try{
-               json = handler.handleResponse(response);
-               }catch(Exception e){
-             	System.out.println("json parse error ");
-             	e.printStackTrace();
-             }
-             }
+            	 System.out.println("else loop");
+                 json = handler.handleResponse(response);
+            }
             JSONParser parser = new JSONParser();
             jsonObject = (JSONObject) parser.parse(json);
-            System.out.println("json object "+  jsonObject);
+           // System.out.println("json object "+  jsonObject);
         /*} catch (ParseException e) {
             e.printStackTrace();
         } catch (ClientProtocolException e) {

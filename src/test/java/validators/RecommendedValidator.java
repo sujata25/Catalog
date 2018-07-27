@@ -34,7 +34,7 @@ public class RecommendedValidator {
 	  
 	  public void verifyRecordForQueriedParentISBN(String expectedParentISBNValue,String expectedRelatedProductISBNValue, String parentInclusion, String relatedProductInclusion) {
 		  try{
-			  int countCUIsbn=0;
+			  
 			  boolean parentFlag=false,relatedFlag=false;
 	        	List<Record> recordList = recommendedProduct.getRecords();
 	        	System.out.println("expectedParentISBNValue is==========="+ expectedParentISBNValue);
@@ -55,6 +55,7 @@ public class RecommendedValidator {
 	    	     }
 	        	
 	        	if(parentInclusion.equalsIgnoreCase("yes")){
+	        		 
 	        			 if(relatedProductInclusion.equalsIgnoreCase("no")){
 	        				 for (Record record:recordList){
 	        					 System.out.println(record.getIsbn13());
@@ -67,7 +68,7 @@ public class RecommendedValidator {
 				 	             }
 		        				 if(record.getCuRecIsbns().isEmpty() || record.getCuRecIsbns()== null || record.getCuRecIsbns().toString() == "") {
 		        					 failureResult.add("MISSING ISBN;");
-		        				 }else if(record.getCuRecIsbns().toString().contains(expectedRelatedProductISBNValue)){
+		        				 }else if(record.getCuRecIsbns().contains(expectedRelatedProductISBNValue)){
 		        					 relatedFlag=true;
 		 	 	            	 }
 	        				 }
@@ -78,21 +79,45 @@ public class RecommendedValidator {
 	        					 failureResult.add("INCORRECT PARENT ISBN AND RELATEDPRODUCT ISBN AVAILABLE;");
 	        				 }
 	        			 }else if((relatedProductInclusion.equalsIgnoreCase("yes")) || (relatedProductInclusion.equalsIgnoreCase(""))){
+	        				 int newCUisbn=0;
+	        				 boolean greaterCUisbn = false,existCUisbn=false,smallerCuisbn=false,blankCuebook=false;
 	        				 for (Record record:recordList){
-		        				 System.out.println("getCuRecIsbns is ====>" + record.getCuRecIsbns());
+	        					int  countCUIsbn=0;
+		        				 System.out.println("recomm getCuRecIsbns is ====>" + record.getCuRecIsbns());
 	        					 if(record.getCuRecIsbns().isEmpty() || record.getCuRecIsbns()== null || record.getCuRecIsbns().toString() == "") {
 	        						 failureResult.add("MISSING ISBN;");
-		        				 }else if(record.getCuRecIsbns().toString().contains(expectedRelatedProductISBNValue)){
-		        					 countCUIsbn++;
-		 	 	            	 }
+		        				 }
+		        				 else{
+		        					 for(int i=0;i<record.getCuRecIsbns().size();i++){
+		        						 System.out.println(record.getCuRecIsbns().get(i));
+		        						 if(record.getCuRecIsbns().get(i).equalsIgnoreCase(expectedRelatedProductISBNValue)){
+		        							 countCUIsbn++;
+		        						 }
+		        					 }
+		        					 if(countCUIsbn == 1) {
+	        			                 existCUisbn = true;
+		        			         }
+		        					 else if(countCUIsbn>1) {
+	        			                 greaterCUisbn = true;
+		        			         }
+		        			         else if(countCUIsbn<1) {
+		        			                 smallerCuisbn = true;
+		        			         }
+		        				 }
+	        					 
+		        				 System.out.println("countCUIsbn is ====>" + countCUIsbn);
+
 	        				 }
-	        				 System.out.println("countCUIsbn is ====>" + countCUIsbn);
-	        				 if(countCUIsbn < 1){
-	        					 failureResult.add("ISBN DOES NOT EXIST IN RECORDS;");
+	        				 System.out.println(greaterCUisbn + "  and " + smallerCuisbn);
+	        				 if(!existCUisbn){
+	        					 if(greaterCUisbn){
+		        		               failureResult.add("MULTIPLE CUREC ISBN IN RECORDS;");
+		        		         }
+		        		         else if(smallerCuisbn){
+		        		               failureResult.add("ISBN DOES NOT EXIST IN RECORDS;");
+		        		         }
 	        				 }
-        					 else if(countCUIsbn > 1){
-	        					 failureResult.add("MULTIPLE CUREC ISBN IN RECORDS;");
-	        				 }
+	        				
 	        			 }
 	        	}	        
 	      

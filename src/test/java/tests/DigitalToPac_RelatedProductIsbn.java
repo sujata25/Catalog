@@ -31,8 +31,8 @@ public class DigitalToPac_RelatedProductIsbn {
 		startCol = 0;
 		totalCols = 8;
 		endPoint = "Related Product";
-		startRow=2;
-		maxRows=3;
+		startRow=2759;
+		maxRows=2760;
 		inputFilePath="D:\\Project\\CU Catalog\\Files\\19_july_2018\\cucatalog.xlsx";
 		reportFilePath =  "D:\\test.xlsx";
 		reportSheetName = "DigitalPac_RelatedProduct";

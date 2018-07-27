@@ -32,8 +32,8 @@ public class RecommendedProduct_ParentISBN {
 		startCol = 0;
 		totalCols = 8;
 		endPoint = "Parent";
-		startRow=81;
-		maxRows=82;
+		startRow=898;
+		maxRows=2000;
 		inputFilePath="D:\\Project\\CU Catalog\\Files\\19_july_2018\\cucatalog.xlsx";
 		reportFilePath =  "D:\\test.xlsx";
 		reportSheetName = "Recommended_ParentISBN";

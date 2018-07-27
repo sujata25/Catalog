@@ -55,7 +55,7 @@ public class CuBundlesValidator {
 	        		 for(Record record:recordList){
 	        			 if(record.getIsbn13()== null || record.getIsbn13() == ""){
 		            			failureResult.add("MISSING ISBN;");
-		            	 }else if(record.getIsbn13().contains(expectedParentISBNValue)){
+		            	 }else if(record.getIsbn13().equalsIgnoreCase(expectedParentISBNValue)){
 		 	            		failureResult.add("INCORRECT ISBN;");
 		 	             }
 	 	             }
@@ -92,12 +92,17 @@ public class CuBundlesValidator {
 	 	            	failureResult.add("PARENT ISBN COUNT AND TOTAL RECORD COUNT IS NOT EQUAL");
 	 	            } */
 	 	            
-	 	           
+	 	           boolean isbnExist=false;
 	 	            for(int m=0;m<isbns_from_excel.size();m++) {
-	 	            	if(!(isbns_from_excel.get(m).equals(isbns_from_response.get(m)))) {
-	 	            		failureResult.add("PARENT ISBN DOES NOT MATCH ISBN13");
-	 	            	}
-	 	            }
+	 	            	 for(int n=0;n<isbns_from_response.size();n++){
+	 	            		if(isbns_from_excel.get(m).equals(isbns_from_response.get(n))) {
+	 	            			isbnExist=true;
+		 	            	}
+	 	            	 }
+	 	            	 if(!isbnExist){
+	 	            		 failureResult.add("ISBN DOES NOT EXIST IN RECORDS;");
+	 	            	 }
+	 	             }
 		 	     }
 	        	        }catch(Exception e) {
 	        	System.out.println("verify record ");

@@ -32,8 +32,8 @@ public class AlternateProduct_ParentISBN {
 		startCol = 0;
 		totalCols = 8;
 		endPoint = "Parent";
-		startRow=5747;
-		maxRows=9000;
+		startRow=9000;
+		maxRows=11148;
 		inputFilePath="D:\\Project\\CU Catalog\\Files\\19_july_2018\\cucatalog.xlsx";
 		reportFilePath =  "D:\\test.xlsx";
 		reportSheetName = "Alternate_ParentISBN";
